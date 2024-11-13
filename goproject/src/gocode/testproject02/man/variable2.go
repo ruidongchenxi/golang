@@ -3,6 +3,11 @@ import "fmt"
 //全局变量定义
 var n7 = 10
 var n8 = 9.7
+//全局变量的批量定义
+var (
+	n9 = 90
+	n1 = "chen"
+)
 func main(){
 	//定义在{}里的变量叫局部变量
 	var w int 
@@ -27,4 +32,7 @@ func main(){
 	fmt.Println(cs)
 	fmt.Println(cd)
     fmt.Println(n8)
+	fmt.Println(n7)
+	fmt.Println(n1)
+	fmt.Println(n9)
 }
