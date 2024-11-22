@@ -13,6 +13,6 @@ func main(){
 	fmt.Println()
 	var n3 int64 = 88888
 	fmt.Println(n3)
-	var n4 int8 = int8(n3)//将int64 转为int8的时候，编译不会出错会有精度损失，但是数据会溢出
+	var n4 int8 = int8(n3)//将int64 转为int8的时候，编译不会出错会有精度损失，但是数据会溢出，结果56
 	fmt.Println(n4)
 }
