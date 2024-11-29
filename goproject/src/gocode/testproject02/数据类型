@@ -1,0 +1,22 @@
+数据类型
+基本数据类型复杂数据类型
+基本数据类型：
+    数值型： 
+      整数型： (int,int8,int16,int32,int64,uint,uint8,uint16uint32,uint64,byte))
+      浮点型：(float32,float64)
+    字符型：(没有单独的字符型，使用byte来保存单个字母字符)
+    布尔型：(bool)
+    字符串：(string)
+    整数类型(int,int8,int16,int32,int64,uint,uint8,uint16uint32,uint64,byte)
+    浮点类型float32(,float64)： 底层存储空间与操作系统无关，会丢失精度，底层存储分别有符号位和指数位，尾数位尾数位只存一个大概。可能出现精度损失
+
+派生数据类型:
+    指针
+    数组
+    结构体
+    管道
+    函数
+    切片
+    接口
+    map
+

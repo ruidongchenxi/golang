@@ -17,5 +17,4 @@ func main(){
 	fmt.Printf("num2的类型是:%T",num2)
 	fmt.Println() //换行
 	fmt.Println(unsafe.Sizeof(num2))
-	//字符类型： 
 }

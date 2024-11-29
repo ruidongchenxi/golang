@@ -13,18 +13,10 @@ func main(){
 	
 	/*   重复定义报错不是重新赋值
 	D:\golang\goproject\src\gocode\testproject02\man>go run variable.go
-
-age= 9
-
-D:\golang\goproject\src\gocode\testproject02\man>go run variable.go
-
-# commandlinearquments
-
+    D:\golang\goproject\src\gocode\testproject02\man>go run variable.go
+    # commandlinearquments
 variable.go:11:6:age redeclared in this block
-
 variable.go:6:6:other declaration of age
-
-
 	*/
     fmt.Println("age=",age)
 }

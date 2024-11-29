@@ -1,0 +1,32 @@
+关键字就是程序发明者规定的有特殊含义的单词，又叫保留字；go 语言中有25个关键字
+1.  break - 使用 break 关键字可以终止循环并继续执行其余代码。
+2.  case - 这是 “switch” 构造的一种形式。我们在切换后指定一个变量。  
+3.  chan-“chan” 关键字用于定义通道。在 “执行” 中，允许您同时运行并行代码。  
+4.  const-'const' 关键字用于为标量值引入名称，例如 2 或 3.14 等。  
+5.  continue - 使用 “continue” 关键字可以返回到 “ for” 循环的开头。  
+6.  default-'default' 语句是可选的，但是您需要在 switch 语句中使用 case 或 default。如果大小写与控制表达式不匹配，则开关跳至默认值。  
+7.  defer - 关键字 'defer' 用于推迟执行功能，直到周围的功能执行为止。  
+8.  else - 如果条件为假，则将 'else' 关键字与 'if' 关键字一起使用以执行替代语句。  
+9.  fallthrough - 在 switch 语句中的情况下使用此关键字。当我们使用此关键字时，将输入下一种情况。  
+10.  for-“for” 关键字用于开始 for 循环。  11.  func-'func' 关键字用于声明一个函数。  
+12.  go  关键字触发一个 goroutine，该例程由 golang 运行时管理。  
+13.  goto-'goto' 关键字可无条件跳转至带标签的语句。  
+14.  if-'if' 语句用于检查循环内的特定条件。  
+15.  import-'import' 关键字用于导入软件包。  
+16.  interface-'interface' 关键字用于指定方法集。方法集是一种类型的方法列表。  
+17.  map-'map' 关键字定义 map 类型。映射是键值对的无序集合。  
+18.  package - 代码在包中分组为一个单元。 “package” 关键字用于定义一个。  
+19.  range - 使用 “range” 关键字可以迭代列表项 (如 map 或 数组) 上的项。  
+20.  return-Go 允许您将返回值用作变量，并且可以为此目的使用 'return' 关键字。  
+21.  select-“select” 关键字使 goroutine 在同步通信操作期间等待。  
+22.  struct-Struct 是字段的集合。我们可以在字段声明后使用'struct' 关键字。  
+23.  switch-'switch' 语句用于启动循环并在块内使用 if-else 逻辑。  
+24.  type - 我们可以使用 'type' 关键字来引入新的结构类型。 
+25.  var-“var” 关键字用于创建 “ Go” 语言的变量。
+
+
+预定义符Go 语言还有 36 个预定义标识符
+append	bool	byte	cap	close	complex	complex64	complex128	uint16
+copy	false	float32	float64	imag	int	int8	int16	uint32
+int32	int64	iota	len	make	new	nil	panic	uint64
+print	println	real	recover	string	true	uint	uint8	uintptr
