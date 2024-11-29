@@ -11,3 +11,129 @@ if 条件表达式{
 条件表达式左右可以不写 ，也不建议写
 if 和表达式中间，一定要有空格
 在golang 中，{}是必须有的，就算你只写一行代码
+
+switch 流程控制
+1.switch 后是一个表达式（即：常量值、变量、一个有返回的函数等都可以）
+2.case 后面的表达式如果是常量值（字面值），则要求不能重复
+3.case 后的各个值的数据类型，必须和swich的表达式数据类型一致
+4.case 后面可以带多个值。使用逗号隔开。比如case值1，值2
+5.case 后面不需要带break
+6.default 语句不是必须，位置也是随意的；建议最后
+7. switch 后也可以不带表达式，当做if分支来用
+8.switch 后也可以直接声明定义一个变量，分号结束，不推荐
+9.switch 穿透，利用fallthrough关键字，如果在case语句块后增加fallthrough,则会继续执行下一个case，也叫switch穿透;使用 fallthrough 会强制执行后面的 case 语句，fallthrough 不会判断下一条 case 的表达式结果是否为 true。
+
+
+
+for 初始化表达式; 布尔表达式;迭代因子{
+    循环体
+}
+ 
+
+
+ break 的介绍
+ 感受 代码
+package main
+import "fmt"
+func main(){
+   var sum int 
+   for i :=1; i<=100;i++ {    
+      sum += i
+      fmt.Println(sum)
+      if sum >=300 {
+         break   //停止正在执行的循环
+      }
+   }
+   ftm.Println("ok")
+}
+总结：
+1.switch 分支中，每个case分支后都用break结束当前分支，但是在go语言中break可以省略不写
+2.break 可以结束正在执行的循环
+深入理解
+终止内层循环
+package main
+import "fmt"
+func main(){
+   //双层循环
+    for i := 1;i<=5; i++{
+      for j :=2 ; j <=4 ; j++{
+         if i == 2 && j == 2{
+            break
+         } 
+         fmt.Printf("i:%v,j:%v \n",i,j)
+      }
+
+    }
+   fmt.Println("ok")
+}
+运行结果
+i:1,j:2
+i:1,j:3
+i:1,j:4
+i:2,j:2
+i:3,j:2
+i:3,j:3
+i:3,j:4
+i:4,j:2
+i:4,j:3
+i:4,j:4
+i:5,j:2
+i:5,j:3
+i:5,j:4
+ok
+
+
+终止外层循环
+    lable1:    添加标签
+    for i := 1;i<=5; i++{
+      for j :=2 ; j <=4 ; j++{
+         if i == 2 && j == 2{
+            break lable1  //结果指定标签的循环
+         } 
+         fmt.Printf("i:%v,j:%v \n",i,j)
+      }
+    }
+   fmt.Println("ok")
+运行的结果
+D:\golang\goproject\src\gocode\testproject08>go run break-2.go                                                                                              
+i:1,j:2                                                                                                                                                     
+i:1,j:3                                                                                                                                                     
+i:1,j:4                                                                                                                                                     
+ok    
+标签使用效果;注意如果标签没有使用，那么标签不用加，否则报错：定义未使用
+
+
+
+
+
+continue ： 结束本次循环；结束当前循环
+3 标签使用效
+   lable1:
+    for i := 1;i<=5; i++{
+      for j :=2 ; j <=4 ; j++{
+         if i == 2 && j == 2{
+            continue lable1
+         } 
+         fmt.Printf("i:%v,j:%v \n",i,j)
+      }
+    } 
+    执行
+i:1,j:2                                                                                                                                                     
+i:1,j:3                                                                                                                                                     
+i:1,j:4                                                                                                                                                     
+i:3,j:2                                                                                                                                                     
+i:3,j:3                                                                                                                                                     
+i:3,j:4                                                                                                                                                     
+i:4,j:2                                                                                                                                                     
+i:4,j:3                                                                                                                                                     
+i:4,j:4                                                                                                                                                     
+i:5,j:2                                                                                                                                                     
+i:5,j:3                                                                                                                                                     
+i:5,j:4                                                                                                                                                     
+ok   
+
+
+goto 
+
+return 关键字
+
