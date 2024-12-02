@@ -1,0 +1,51 @@
+init 函数： 初始化函数，可以进行一些初始化操作。每个源文件都可以包含一个int函数，该函数会在main函数之前执行，被go运行框架调用
+全局变量定义： init 函数，main函数的执行流程
+多个源文件都有init函数的时候，如何执行 
+
+
+
+
+
+package dbtset
+import "fmt"
+var Age int
+var Sex string
+var Name string
+// 定义一个init函数对变量进行初始化赋值
+func init(){
+	fmt.Println("testutils 中的init 函数被执行了")
+	Age = 19
+	Sex = "女"
+	Name = "丽丽"
+}
+
+
+
+
+
+
+
+package main
+import (
+	"fmt"
+	"gocode/testproject10/crm/db" //先执行
+)
+var num int = test1()
+func test1() int{
+	fmt.Println("test 函数被执行")
+	return 10
+}
+func init() {
+	fmt.Println("main 包里的，init 函数被执行")
+}
+func main(){
+	fmt.Println("main 函数被执行")
+	fmt.Println("Age=",dbtset.Age)
+}
+
+D:\golang\goproject\src\gocode\testproject10\crm\main>go run init1.go                                                                                       
+testutils 中的init 函数被执行了                                                                                                                             
+test 函数被执行                                                                                                                                             
+main 包里的，init 函数被执行                                                                                                                                
+main 函数被执行                                                                                                                                           
+Age= 19             

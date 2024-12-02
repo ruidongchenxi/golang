@@ -1,0 +1,62 @@
+统计字符串的长度，按字节统计
+len(str)
+
+package main
+import "fmt"
+func main(){
+	str := "golang你好"//在golang中，汉字是utf-8字符集，一个汉字3个字节
+	fmt.Println(len(str))
+}
+
+使用内置函数不用导包，直接用
+字符串遍历
+r:=[]rune(str)
+(1)利用方式1：for-range键值循环
+
+
+func main(){
+	str := "golang你好"//在golang中，汉字是utf-8字符集，一个汉字3个字节
+	fmt.Println(len(str))
+	//对字符串进行遍历：
+	//方式1：利用键循环：for-range
+	for i, value := range str {
+		fmt.Printf("索引为：%d,具体的值为: %c \n",i,value)
+	}
+	//方式2
+	r := []rune(str)
+	for i :=0; i < len(r); i++{
+		fmt.Printf("%c\n",r[i])
+	}
+}
+字符串转整数
+n,err := strconv.Atoi("66")
+整数转字符串
+str = strconv.ltoa(6887)
+查找子串是否在指定的字符串中
+strings.Contains("javaandgolang","go")
+统计一个字符串有几个指定的字串
+strings.Count("javaandgolang","a")
+不区分大小写的字符串比较
+fmt.Println(strings.EqualFold("go","Go"))
+返回字串在字符串第一次出现的索引值，如果没有返回-1：
+strings.lndex("javaandgolang","a")
+字符串替换
+strings.Replace ( "goandjavagogo","go","golang",n)
+ n可以指定替换的个数 ，如果n 是-1 表示全部替换,替换2个n就是2
+按照指定的某字符，为分割标识，将一个学符串拆分成字符串数组
+strings.Split("go-python-java","-")
+将字符串的字母进行大小写转换
+Strings.ToLower("GO")//go
+Strings.ToUpper("go")//GO
+将字符串左右两边的空格去掉
+strings.TrimSpace("   go and java   ")
+将字符串左右两边指定的字符去掉
+strings.Trim("~golang~","~")
+将字符串左边指定的字符去掉
+strings.TrimLeft("~golang~","~")
+将字符串右边指定的字符去掉
+strings.TrimRight("~golang~","~")
+判断字符串是否以指定的字符串开头
+strings.HasPrefix("http://java.sun.com/jsp/jstl/fmt","http")
+判断字符串是否以指定的字符串结尾
+strings.HasSuffix("demo.png","png")
