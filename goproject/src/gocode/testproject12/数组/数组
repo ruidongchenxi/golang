@@ -1,0 +1,17 @@
+练习引入
+package main
+import "fmt"
+func main(){
+	//给出五个学生的成绩，求成绩总和，平均数
+    score1 := 95
+	score2 := 91
+	score3 := 97
+	score4 := 76
+	score5 := 65
+	//求和
+	sum := score1 + score2 + score3 + score4 + score5
+	//平均数
+	avg := sum / 5 
+	fmt.Printf("成绩总和多少: %v,平均总和为：%v",sum,avg)
+}
+缺点 成绩变量定义个数太多，成绩管理费劲，维护费劲

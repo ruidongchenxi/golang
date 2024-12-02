@@ -1,0 +1,71 @@
+自定义错误：需要调用errors包下的New("")
+package main
+import (
+	"fmt"
+    "errors"
+)	
+func main(){
+	err := test()
+	if err != nil {
+		fmt.Println("自定义错误：",err)
+	}
+	fmt.Println("上面除法操作执行成功")
+	fmt.Println("正常执行")
+}
+func test() (err error){
+
+	num1 := 10
+	num2 := 0
+	if num2 == 0 {
+		return errors.New("除数不能为0")
+
+	}else{ //除数不为0 正常执行
+	result := num1 / num2
+	fmt.Println(result)
+	//如果没有错误返回nil 值
+	return nil 
+	}
+}
+有一种情况程序出现错误以后，后续代码就没必要执行，想让程序中断，退出程序
+借助builtin包下内置函数： panic
+func panic
+unc panic func panic(v interface{}) 内建函数panic停止当前Go程的正常执行。当函数F调用panic时，F的正常执行就会立刻停止。F中defer的所有函数先入后出执行后，F返回给其调用者G。G如同F一样行动，层层返回，直到该Go程中所有函数都按相反的顺序停止执行。之后，程序被终止，而错误情况会被报告，包括引发该恐慌的实参值，此终止序列称为恐慌过程。
+
+
+package main
+import (
+	"fmt"
+    "errors"
+)	
+func main(){
+	err := test()
+	if err != nil {
+		fmt.Println("自定义错误：",err)
+        panic(err)// zhong
+	}
+	fmt.Println("上面除法操作执行成功")
+	fmt.Println("正常执行")
+}
+func test() (err error){
+
+	num1 := 10
+	num2 := 0
+	if num2 == 0 {
+		return errors.New("除数不能为0")
+
+	}else{ //除数不为0 正常执行
+	result := num1 / num2
+	fmt.Println(result)
+	//如果没有错误返回nil 值
+	return nil 
+	}
+}
+
+
+自定义错误： 除数不能为0                                                                                                
+panic: 除数不能为0                                                                                                      
+                                                                                                                        
+goroutine 1 [running]:                                                                                                  
+main.main()                                                                                                             
+        D:/golang/goproject/src/gocode/testproject11/自定义错误/main.go:10 +0x125                                       
+exit status 2                                                                             
