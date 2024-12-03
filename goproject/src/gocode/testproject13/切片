@@ -1,0 +1,173 @@
+切片(slice) 是golang中一种特有的数据类型
+数组有特定用处，但是有一些呆板（数组长度不可变）,在go语言代码里不是特别常见。相对切片随处可见，切片是一种建立在数组类型之上的抽象，它构建在数组之上并且提供更强大的能力和便捷
+切片(slice) 是对数组一个连续片段的引用，所以切片是引用类型，这个片段可以是整个数组，或者是由起始和终止索引标识的一些项的子集。需要注意的是。终止索引标识的项不包括在切片内，切片提供了一个相关数组的动态窗口
+
+
+
+
+package main
+import "fmt"
+func main(){
+	//定义数组
+	var intarr [6]int = [6]int{3,4,5,6,7,8}
+	//切片
+	//定义一个切片名字为slice.[]动态变化的数组长度不写，int类型，intarr原数组
+	//[1:3]切片切出的一个片段---》索引：从1开始，到3结束，不包括3 【包左不包右】
+	//var slice [] int = intarr[1:3]
+	slice := intarr[1:3]
+	fmt.Println("intarr:",intarr)
+	//输出切片
+	fmt.Println("slice:",slice)
+	//切片元素个数
+	fmt.Println("切片元素个数：",len(slice))
+	//获取切片的容量
+	fmt.Println("切片容量：",cap(slice))
+}
+切片有3个字段的数据结构：一个是指向底层数组的指针，一个是切片长度，一个是切片容量
+
+
+切片的定义
+方式定义一个切片，然后让切片去引用一个已经创建好的数组
+var intarr [6]int = [6]int{3,4,5,6,7,8}
+	//切片
+	//定义一个切片名字为slice.[]动态变化的数组长度不写，int类型，intarr原数组
+	//[1:3]切片切出的一个片段---》索引：从1开始，到3结束，不包括3 【包左不包右】
+	//var slice [] int = intarr[1:3]
+	slice := intarr[1:3]
+	fmt.Println("intarr:",intarr)
+	//输出切片
+	fmt.Println("slice:",slice)
+	//切片元素个数
+	fmt.Println("切片元素个数：",len(slice))
+	//获取切片的容量
+	fmt.Println("切片容量：",cap(slice))
+	fmt.Printf("数组下标为1的内存地址：%p\n",&intarr[1])
+	fmt.Printf("切片下标为0的内存地址：%p\n",&slice[0])
+	slice[1] = 16
+	fmt.Println(slice[1])
+通过 make 内置函数来创建切片 基本语法 var 切片名 [type = make([],len,[cap])]
+package main
+import "fmt"
+func main(){
+    //定义切片：make 函数的三个参数1切片类型 2切片长度 3切片容量
+	slice := make([]int,4,20)
+	fmt.Println(slice)
+	fmt.Println("切片长度",len(slice))
+	fmt.Println("切片容量",cap(slice))
+}
+
+
+PS :make 底层创建一个数组对外不可见。所以不可以直接操作这个数组，要通过sclice去间接的访问各个元素，不可以直接对数组进行维护/操作
+定义一个切片，直接就指定具体数组，使用原理类似make的方式
+	slice2 := []int{1,2,3}
+	fmt.Println("切片长度",len(slice2))
+	fmt.Println("切片容量",cap(slice2))
+
+切片遍历
+for 循环常规遍历
+for-range结构遍历
+package main
+import "fmt"
+func main(){
+	//
+	slice := make([]int,4,20)
+	slice[0] = 87
+	slice[1] = 45
+	slice[2] = 68
+	slice[3] = 90
+	//方式1
+    for i :=0; i<len(slice);i++{
+		fmt.Println(slice[i])
+	}
+	fmt.Println("----------------------------------------------------")
+	for k,_ := range slice{
+		fmt.Println(slice[k])
+	}
+} 
+注意切片定义后不可以直接使用，需要让其引用到一个数组，或者make一个空间切片使用
+切片使用不能越界
+package main
+import "fmt"
+func main(){
+	//定义切片
+	// 
+	var intarr [6]int = [6]int{1,2,3,4,7,9}
+		//定义切片
+		var sclice []int = intarr[1:4]
+		fmt.Println(sclice)
+		fmt.Println(sclice[0])
+		fmt.Println(sclice[1])
+		fmt.Println(sclice[2])
+		fmt.Println(sclice[3])//下标越界
+goroutine 1 [running]:                                                                                                                                      
+main.main()                                                                                                                                                 
+        D:/golang/goproject/src/gocode/testproject13/切片1/main3.go:13 +0x17c                                                                               
+exit status 2
+简写
+1. var slice = arr[0:end]-----> var slice = arr[:end]
+2. var slice = arr[start:len(arr)]    ---->var slice = arr[start:]
+3. var slice = arr[0:len(arr)]  ------> var slice= arr[:]
+切片可以继续切片
+package main
+import "fmt"
+func main(){
+	//定义切片
+	// 
+	var intarr [6]int = [6]int{1,2,3,4,7,9}
+		//定义切片
+		var sclice []int = intarr[1:4]
+		fmt.Println(sclice)
+		fmt.Println(sclice[0])
+		fmt.Println(sclice[1])
+		fmt.Println(sclice[2])
+		//fmt.Println(sclice[3])//下标越界*/
+		//对切片再切片
+		sclice2 := sclice[1:2]
+		fmt.Println(sclice2)
+		sclice2[0] = 67
+		fmt.Println(sclice[1])
+		fmt.Println(sclice2[0])
+}
+
+[2 3 4]                                                                                                                                                     
+2                                                                                                                                                           
+3                                                                                                                                                           
+4                                                                                                                                                           
+[3]                                                                                                                                                         
+67                                                                                                                                                          
+67
+//底层原理
+1底层追加元素的时候对数组进行扩容，老数组扩容为新数组
+创建一个新数组，将老数组中的值复制到新数组中，在新数组中追加88，50
+sclice2 底层数组的指向 指向的是新数组
+往往在使用追加的时候其实想要做的效果给sclic追加：sclice = append(sclice,89,45)
+动态增长
+package main
+import "fmt"
+func main(){
+	//定义数组
+	var intarr [6]int = [6]int{1,2,4,56,17,23}
+	//定义切片
+	var sclice []int = intarr[1:4]//2,4,56
+	fmt.Println(len(sclice))
+	sclice2 := append(sclice,89,45)
+	sclice = append(sclice,89,45)
+	fmt.Println(sclice2)
+	fmt.Println(sclice)
+}
+//底层新数组，不能直接维护，需要通过切片间接操作
+
+
+通过append追加切片
+	sclice3 := []int{99,44}
+	sclice = append(sclice,sclice3...)
+	fmt.Println(sclic）
+切片拷贝
+package main
+import "fmt"
+func main(){
+	var a []int = []int{1,2,3,4,6,5}
+	var b []int = make([]int,10)
+	copy(b,a)//将a对应数组中元素拷贝b中对应的数组中去
+	fmt.Println(b)
+}

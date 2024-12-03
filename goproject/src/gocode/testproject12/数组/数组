@@ -15,3 +15,185 @@ func main(){
 	fmt.Printf("成绩总和多少: %v,平均总和为：%v",sum,avg)
 }
 缺点 成绩变量定义个数太多，成绩管理费劲，维护费劲
+	//定义一个数组
+	var scores [5]int 
+	//将成绩存入数组
+	scores[0] = 95
+	scores[1] = 83 
+	scores[2] = 73
+	scores[3] = 72
+	scores[4] = 80
+	sum := 0
+	for i :=0; i <len(scores);i++{ //遍历数组
+		sum += scores[i]
+	}
+	//求和
+	avg := sum / len(scores)
+	//输出
+	fmt.Printf("和：%v，平均：%v",sum,avg)
+数组内存
+package main
+import "fmt"
+func main(){
+	//声明数组
+	var arr [3]int16
+	//获取数组长度
+	fmt.Println(len(arr))
+	//输出数组
+	fmt.Println(arr)
+	//验证arr中存储的是地址值
+	fmt.Printf("arr的地址为：%p\n",&arr)
+	fmt.Printf("arr的地址为：%p\n",&arr[0])
+	fmt.Printf("arr的地址为：%p\n",&arr[1])
+	fmt.Printf("arr的地址为：%p\n",&arr[2])
+}
+内存分析
+D:\golang\goproject\src>go run D:\golang\goproject\src\gocode\testproject12\数组2\main.go
+3
+[0 0 0]
+arr的地址为：0xc00000a0d8
+arr的地址为：0xc00000a0d8
+arr的地址为：0xc00000a0da
+arr的地址为：0xc00000a0dc
+数组优点： 访问速度快
+数组遍历
+普通循环
+for i :=0; i< len(scores); i++{
+		fmt.Printf("请输入第%d学生成绩：" ,i+1)
+		fmt.Scanln(&scores[i])
+		sum +=scores[i]
+	}
+键值遍历
+
+	for key.value := range scores {
+		
+	}
+注意
+（9） scores 就是你要的数组
+(2) 每次遍历得到的索引得到的索引用key接收，每次遍历得到的索引用value接受
+（）key 、value 名字随便写；只是局部遍量
+	for key,value := range scores {
+		fmt.Printf("第%d个学生成绩为：%d\n",key+1,value)
+	}
+
+
+    初始化数组
+    //第一种
+	var arr1 [3]int = [3]int {3,6,9}
+	fmt.Println(arr1)
+	//第二种
+	var arr2 = [3]int {1,4,7}
+	fmt.Println(arr2)
+	//
+	var arr3 = [...]int {1,2,3,4,5,6}
+	fmt.Println(arr3)
+	//
+	var arr4 = [...]int{1:45,0:89,3:44}
+	fmt.Println(arr4)
+
+
+    长度属于类型一部分
+    	//定义一个数组
+	var arr1 = [3]int{3,6,9}
+	fmt.Println(arr1)
+	fmt.Printf("数组的类型:%T\n",arr1)
+	var arr2 = [5]int{3,4,5,6,8}
+	fmt.Printf("数组的类型:%T\n",arr2)
+    运行的结果
+[3 6 9]
+数组的类型:[3]int
+数组的类型:[5]int
+
+
+
+go 中数组属于值类型，在默认情况下是值传递，因此会进行值拷贝(不更改)
+package main
+import "fmt"
+func main(){
+	//定义一个数组
+	/*
+	var arr1 = [3]int{3,6,9}
+	fmt.Println(arr1)
+	fmt.Printf("数组的类型:%T\n",arr1)
+	var arr2 = [5]int{3,4,5,6,8}
+	fmt.Printf("数组的类型:%T\n",arr2)
+	*/
+	var arr3 = [3]int{3,6,9}
+	test1(&arr3)
+    fmt.Println(arr3)
+}
+func test1 (arr *[3]int){
+	(*arr)[0] = 7
+}
+
+如果想在其他函数中，修改原来的数组，可以使用引用传递（指针方式）
+package main
+import "fmt"
+func main(){
+	var arr3 = [3]int{3,6,9}
+	test1(&arr3)
+    fmt.Println(arr3)
+}
+func test1 (arr *[3]int){
+	(*arr)[0] = 7
+}
+二维数组
+
+package main
+import "fmt"
+func main(){
+	var arr [3][3] int16
+	fmt.Println(arr)
+}
+D:\golang\goproject\src>go run D:\golang\goproject\src\gocode\testproject12\二维数组\main.go
+[[0 0 0] [0 0 0] [0 0 0]]
+二维数组内存
+package main
+import "fmt"
+func main(){
+	var arr [3][3] int16
+	fmt.Println(arr)
+	fmt.Printf("arr地址值：%p\n",&arr)
+	fmt.Printf("arr[0]的地址值：%p\n",&arr[0])
+	fmt.Printf("arr[0][0]的地址值：%p\n",&arr[0][0])
+	fmt.Printf("arr[0][2]的地址值：%p\n",&arr[0][2])
+	fmt.Printf("arr[1]的地址值：%p\n",&arr[1])
+	fmt.Printf("arr[1][0]的地址值：%p\n",&arr[1][0])
+}
+执行
+[[0 0 0] [0 0 0] [0 0 0]]
+arr地址值：0xc00009e030
+arr[0]的地址值：0xc00009e030
+arr[0][0]的地址值：0xc00009e030
+arr[0][2]的地址值：0xc00009e034
+arr[1]的地址值：0xc00009e036
+arr[1][0]的地址值：0xc00009e036
+赋值
+	//赋值
+	arr[0][2] = 16
+	arr[1][2] = 67
+二维数组初始化操作
+	//初始化操作
+	var arr1 [2][3]int = [2][3]int{{1,2,4},{7,8,9}}
+	fmt.Println(arr1)
+二维数组遍历
+普通循环
+键值循环
+package main
+import "fmt"
+func main(){
+    var arr1 [2][3]int = [2][3]int{{1,2,4},{7,8,9}}
+	fmt.Println(arr1)
+	//方式1
+	for i := 0;i<len(arr1);i++{
+		for x :=0;x<len(arr1[i]);x++{
+			fmt.Println(arr1[i][x])
+		}
+	}
+	//方式2
+	for key,value := range arr1 {
+		for k,v := range value {
+			fmt.Printf("arr[%v]%v]=%v\n",key,k,v)
+		}
+	}
+}
