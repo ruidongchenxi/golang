@@ -4,4 +4,111 @@ var map 变量名字 map[keytype]valuetype
 PS: key 、value 的类型：bool、数字、String、指针、channel,还可以是只包含前面几个类型的接口，结构体、数组
 PS: key通常为int、string类型，value通常为数字(整数、浮点数、)、string、map、结构体
 PS: slice 、map、function 不使用闭包可以吗
- 
+ map 的特点
+ map 集合在使用前一定要make
+ map 的key-value 是无序的
+ key 是不可重复的，如果遇到重复，后一个value 会替换前一个
+ value 是可以重复的 
+ make 函数第二个参数可以省略默认就分配一个内存
+ package main
+import "fmt"
+func main(){
+	//定义map
+	var a map[int]string
+	//只声明map内存是没有分配
+	//必须通过make 函数初始化
+	a = make(map[int]string,10)//可以存放10个键值对
+	//将键值对存入map中
+	a[2009] = "chenxi"
+	a[2006] = "chenxi-1"
+	a[2345] = "erdt"
+	a[2006] = "ed"
+	a[2007] = "chenxi"
+	//输出集合
+	fmt.Println(a)
+}
+
+定义map
+package main
+import "fmt"
+func main(){
+	//定义map
+	var a map[int]string
+	//只声明map内存是没有分配
+	//必须通过make 函数初始化
+	a = make(map[int]string,10)//可以存放10个键值对
+	//将键值对存入map中
+	a[2009] = "chenxi"
+	a[2006] = "chenxi-1"
+	a[2345] = "erdt"
+	a[2006] = "ed"
+	a[2007] = "chenxi"
+	//输出集合
+	fmt.Println(a)
+	//方式2
+	b := make(map[int]string)
+	b[12] = "cf"
+	b[13] = "ds"
+	fmt.Println(b)
+	//方式3
+	c := map[int]string{
+		200067 : "golang",
+		500989 : "php",
+		100000 : "sql" ,
+	}
+	c[345679] = "kubernetes"
+	fmt.Println(c)
+}
+增加更新操作
+package main
+import "fmt"
+func main(){
+
+}
+
+删除操作
+delete
+清空操作
+（1） 如果要清空map的所有key，没有一个专门的方法一次删除，可以遍历一下key，逐个删除
+（2） 或者map = make (...),make 一个新的，让原来的成为垃圾，被gc 回收
+查询操作
+value,bool = map,[key]
+value 为返回的value,bool为是否返回，要么true要么false
+package main
+import "fmt"
+func main(){
+	b := make(map[int]string)
+	b[12] = "cf"
+	b[13] = "ds"
+	fmt.Println(b)
+	//查
+	value,flag := b[12]
+	fmt.Println(value)
+	fmt.Println(flag)
+	
+
+}
+	//获取 
+	fmt.Println(len(b))
+	// 遍历
+	for k,v := range b{
+		fmt.Printf("key为：%v value: %v \n",k,v)
+	}
+	//加深
+	a := make(map[string]map[int]string)
+	//赋值
+	a["班级1"] = make(map[int]string,3)
+	a["班级1"][01] = "cx"
+	a["班级1"][02] = "ix"
+	a["班级1"][03] = "bx"
+	a["班级2"] = make(map[int]string,3)
+	a["班级2"][01] = "cxe"
+	a["班级2"][02] = "cxo"
+	a["班级2"][03] = "ceo"
+	for k1,v1 := range a {
+		fmt.Println(k1)
+		for k,v := range v1{
+			fmt.Printf("学号：%v 姓名: %v \n",k,v)
+		}
+		fmt.Println()
+	}

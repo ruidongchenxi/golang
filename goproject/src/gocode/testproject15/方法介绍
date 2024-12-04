@@ -1,0 +1,122 @@
+方法是作用在指定的数据类型上、和指定的数据类型绑定，因此自定义类型。都可以有方法，而不仅仅是struct
+方法的声明和调用格式
+type A struct {
+    Num int
+}
+func (a A) test(){
+    fmt.Println(a,Num)
+}
+调用
+var a A 
+A.test()
+代码层面
+package main
+import "fmt"
+//定义Person结构体
+type Person struct {
+	Name string
+}
+//给Person结构体绑定方法test
+func (p Person) test(){//参数名字随便起
+	fmt.Println(p.Name)
+}
+func main(){
+	//创建结构体对象
+	var p Person
+	p.Name = "丽丽"
+	p.test()
+}
+注意
+test 方法中参数名字随意起
+结构体Person和test方法绑定；调用test方法必须靠指定类型：Person
+如果其他类型变量调test方法要报错
+结构体对象传入test方法中实际上是值传递，和函数参数传递一致
+package main
+import "fmt"
+//定义Person结构体
+type Person struct {
+	Name string
+}
+//给Person结构体绑定方法test
+func (p Person) test(){//参数名字随便起
+	p.Name="露露"
+	fmt.Println(p.Name)
+}
+func main(){
+	//创建结构体对象
+	var p Person
+	p.Name = "丽丽"
+	p.test()//调用方法
+	fmt.Println(p.Name )
+}
+结构体类型是值类型，在方法调用中，遵守值类型的传递机制，是值拷贝传递方式
+如程序员希望在方法中，力改结构体变量的值，可以通过结构体指针方式来处理
+
+
+package main
+import "fmt"
+//定义Person结构体
+type Person struct {
+	Name string
+}
+//给Person结构体绑定方法test
+//func (p Person) test(){//参数名字随便起
+func (p *Person) test(){ //指针对象的方法
+	p.Name="露露"
+	fmt.Println(p.Name)
+}
+func main(){
+	//创建结构体对象
+	var p Person
+	p.Name = "丽丽"
+	fmt.Printf("p的地址值：%p \n",&p)
+	fmt.Println(p.Name)
+	//p.test() //调用方法
+	//(&p).test()//调用方法
+	p.test() //指针类型也可以这么写。底层编译器做了优化，底层自动帮我们加上&*符号
+	fmt.Println(p.Name )
+}
+
+golang中方法作用在指定的数据类型之上，和指定的数据类型绑定，因此自定义类型，都可以有方法，而不仅仅是struct,比如int，float32等都可以有方法
+package main
+import "fmt"
+type integer int 
+func (i integer) print(){
+	i = 20
+	fmt.Println("i= ",i)
+}
+func (i *integer) change(){
+	*i = 30
+	fmt.Println("i= ",(*i))
+}
+func main(){
+	var i integer = 20
+	fmt.Println(i)
+    i.print()
+	i.change()
+	fmt.Println(i)
+}
+方法的访问范围控制的规则，和函数一样，方法名首字母小写，只能在本包访问，方法名首字母大写，可以在本包和其他包访问
+如果一个类型实现了String()这个方法，那么fmt.Println默认会调用这个变量的String()进行输出
+以后定义结构体的话。常定义String()作为输出结构体信息的方法，fmt.Println默认会调用这个变量的String()进行输出
+package main
+import "fmt"
+type Student struct{
+	Name string
+	Age int
+}
+
+func (s *Student) String() string{
+	str := fmt.Sprintf("Name = %v, Age = %v",s.Name,s.Age)
+	return str
+}
+
+func main() {
+	stu := Student{
+		Name : "丽丽",
+		Age : 20,
+	}
+	//传入地址,结构体如果绑定了string方法则会自动调用
+	fmt.Println(&stu)
+}
+
