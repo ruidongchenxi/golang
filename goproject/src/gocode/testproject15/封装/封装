@@ -1,0 +1,53 @@
+封装
+封装就是把抽象出的字段和对字段的操作封装一起，数据被保护在内部。程序的其他包只有通过被授权的操作方法，才能对字段进行操作
+封装的好处
+隐藏实现细节
+可以对数据进行验证，保证安全合理
+golang中如何实现封装
+建议将结构体、字段（属性）的首字母小写（其他包不能使用，类似private，实际开发不小写也可能，因为封装没有那么严格）
+给结构体所在包提供一个工厂模式的函数，首字母大写（类似构造一个函数）
+提供一个首字母大写的set方法(类似其他语言的public)，用于属性判断并赋值
+func (var 结构体类型名) SetXxx(参数列表){
+    //加入数据验证的业务逻辑
+    var.Age = 参数为空
+}
+代码实现 
+
+
+package main
+import (
+	"fmt"
+    cy "gocode/testproject15/封装/model"
+)
+
+func main(){
+	//创建结构体实例
+	p := cy.NewPerson("小龙")
+    p.SetAge(20)
+	g := p.GetAge()
+	fmt.Println(g)
+}
+package model
+import "fmt"
+
+type person struct{
+	Name string
+	age int
+}
+//定义工厂模式的函数，相当于构造器
+func NewPerson(name string) *person{
+	return &person{
+		Name:name,
+	}
+}
+//定义set和age函数，对age字段进行封装，因为在函数中可以加一些列的限制操作，确保被封装字段的安全合理性
+func (p *person) SetAge(age int){
+	if age > 0 && age < 150 {
+		p.age = age
+	} else {
+		fmt.Println("年龄输入不对")
+	}
+}
+func (p *person) GetAge() int{
+	return p.age
+}

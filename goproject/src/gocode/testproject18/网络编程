@@ -1,0 +1,140 @@
+调用Dial 函数
+func Dial(network, address string) (Conn, error)
+
+
+
+package main
+import (
+	"fmt"
+	"net"
+)
+func main(){
+	//dayin
+	fmt.Println("客户端启动")
+	//调用Dial 函数;参数需要指定协议 指定服务器端的IP+PORT
+	conn,err := net.Dial("tcp","127.0.0.1:8888")
+	if err != nil {
+		//链接失败
+		fmt.Println("错误端链接失败： err",err)
+		return
+	}
+	fmt.Println("链接成功")
+}
+服务器端
+type Listener 函数
+type Listener interface {
+    // Addr返回该接口的网络地址
+    Addr() Addr
+    // Accept等待并返回下一个连接到该接口的连接
+    Accept() (c Conn, err error)
+    // Close关闭该接口，并使任何阻塞的Accept操作都会不再阻塞并返回错误。
+    Close() error
+}
+Listener是一个用于面向流的网络协议的公用的网络监听器接口。多个线程可能会同时调用一个Listener的方法。
+func Listen(net, laddr string) (Listener, error)
+返回在一个本地网络地址laddr上监听的Listener。网络类型参数net必须是面向流的网络： "tcp"、"tcp4"、"tcp6"、"unix"或"unixpacket"。参见Dial函数获取laddr的语法。
+package main
+import (
+	"fmt"
+	"net"
+
+)
+func main(){
+	//打印信息
+	fmt.Println("服务器端启动")
+	//进行监听
+	listen,err  := net.Listen("tcp","127.0.0.1:8888")
+    if err != nil{
+		fmt.Println("监听失败")
+	    return
+	}
+	//监听成功
+	//等待客户端链接
+	for {
+		conn,err2 := listen.Accept()
+		if err2 != nil{
+			fmt.Println("连接失败")
+		}else{
+			//链接成功
+			fmt.Printf("成功 IP=%v. 接受客户端信息：%v\n",conn,conn.RemoteAddr().String())
+		}
+	}
+}
+
+
+
+
+客户端发送数据
+package main
+import (
+	"fmt"
+	"net"
+	"bufio"
+	"os"
+)
+func main(){
+	//dayin
+	fmt.Println("客户端启动")
+	//调用Dial 函数;参数需要指定协议 指定服务器端的IP+PORT
+	conn,err := net.Dial("tcp","127.0.0.1:8888")
+	if err != nil {
+		//链接失败
+		fmt.Println("错误端链接失败： err",err)
+		return
+	}
+	fmt.Println("链接成功",conn)
+	reader := bufio.NewReader(os.Stdin)//终端标准输入
+    //读取用户输入
+	str,err := reader.ReadString('\n')
+	if err != nil {
+       fmt.Println("终端输入失败,err",err)
+	}
+	//将终端输入数据发生给服务器
+    n,err := conn.Write([]byte(str))
+	if err != nil{
+		fmt.Println("失败",err)
+	}
+	fmt.Printf("发送成功发生了%d字节\n",n)
+}
+服务端接受处理
+package main
+import (
+	"fmt"
+	"net"
+
+)
+func process(conn net.Conn){
+	defer conn.Close()
+	for {
+		//创建切片
+		buf := make([]byte,1024)
+		n,err := conn.Read(buf)
+		if err != nil {
+           return
+		}
+		fmt.Println(string(buf[0:n]))
+	}
+}
+func main(){
+	//打印信息
+	fmt.Println("服务器端启动")
+	//进行监听
+	listen,err  := net.Listen("tcp","127.0.0.1:8888")
+    if err != nil{
+		fmt.Println("监听失败")
+	    return
+	}
+	//监听成功
+	//等待客户端链接
+	for {
+		conn,err2 := listen.Accept()
+		if err2 != nil{
+			fmt.Println("连接失败")
+		}else{
+			//链接成功
+			fmt.Printf("成功 IP=%v. 接受客户端信息：%v\n",conn,conn.RemoteAddr().String())
+		}
+		//准备协程
+		go process(conn)
+	}
+}

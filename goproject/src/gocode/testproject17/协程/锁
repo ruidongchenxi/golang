@@ -1,0 +1,55 @@
+锁机制
+互斥锁Mutex
+其中Mutex为互斥锁，Lock()枷锁，Unlock()解锁。使用Locak()加锁后，便不能再次对其进行加锁。直到Unlock()解锁对其解锁后，才能再次加锁，适用于读写不确定的场景，即读写次数没有明显区别
+性能 效率相对来说比较低
+读写锁
+RWMutex 是一个读写锁，其经常用于读多写少的场景
+在读的时候，数据之间不产生影响，读和写之间才产生影响
+
+type Mutex 
+type Mutex struct {
+    // 包含隐藏或非导出字段
+} 
+Mutex是一个互斥锁，可以创建为其他结构体的字段；零值为解锁状态。Mutex类型的锁和线程无关，可以由不同的线程加锁和解锁。
+func (*Mutex) Lock func (m *Mutex) Lock() 
+ Lock方法锁住m，如果m已经加锁，则阻塞直到m解锁。 
+func (*Mutex) Unlock func (m *Mutex) Unlock() 
+ Unlock方法解锁m，如果m未加锁会导致运行时错误。锁和线程无关，可以由不同的线程加锁和解锁。
+ package main
+import (
+	"fmt"
+    "sync"
+)
+//加入互斥锁
+var lock sync.Mutex
+var t int
+var wg sync.WaitGroup
+//var lock sync.Mutex
+func add(){
+	defer wg.Done()
+	for i :=0;i < 100000;i++{
+		//枷锁
+		lock.Lock()
+		t = t +1
+		//
+		lock.Unlock()
+	}
+}
+func sub(){
+	defer wg.Done()
+	//lock.Lock()
+	for i :=0;i < 100000;i++{
+        lock.Lock()	
+		t = t -1
+		lock.Unlock()
+	}
+	
+}
+func main(){
+	wg.Add(2)
+	//启动协程
+	go add()
+	go sub()
+	wg.Wait()
+	fmt.Println(t)
+}

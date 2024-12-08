@@ -1,0 +1,66 @@
+ 方式1 按照顺序赋值操作
+ 方式2 按照指定的类型
+ 方式3 想要返回结构体的指针类型
+ 	//按结构体赋值；必须按照顺序
+    var s1 Student = Student{"小李",19}
+    fmt.Println(s1)
+	//方式2
+	var s2 Student = Student{
+		Name : "丽丽"
+		Age : 16
+	}
+	fmt.Println(s2)
+	//方式3
+	var s3 *Student = &Student("明明",26)
+	fmt.Println(*s3)
+
+    //挎包调用的结构体
+
+package model
+
+
+
+type Student struct{
+	Name string
+	Age int
+}
+
+package main
+import (
+	"fmt"
+	cx "gocode/testproject15/面向对象/model"
+)
+
+func main(){
+	//跨包访问
+	//var s cx.Student = cx.Student{"丽丽",10}
+	s :=  cx.Student{"丽丽",10}
+	fmt.Println(s)
+}
+  首字母大写在才可以在其他包访问
+  首字母小写挎包访问需要工厂模式
+  package model
+
+
+
+type student struct{
+	Name string
+	Age int
+}
+func NewStudent(n string,a int) *student{
+	return &student{n,a}
+}
+package main
+import (
+	"fmt"
+	cx "gocode/testproject15/面向对象/model"
+)
+
+func main(){
+	//跨包访问
+	//var s cx.Student = cx.Student{"丽丽",10}
+	//s :=  cx.Student{"丽丽",10}
+	//fmt.Println(s)
+	s := cx.NewStudent("小龙",17)
+	fmt.Println(*s)
+}

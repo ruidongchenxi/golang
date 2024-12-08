@@ -19,7 +19,7 @@ func test04 (num1 int,num2 int)(int,int){
 func test05 (num1 int,num2 int)(sub int,sum int){
 	sum := num1 + num2
 	sub := num1 - num2
-	return 
+	return sum,sub
 }
 func main(){
 	a := test

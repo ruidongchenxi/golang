@@ -1,0 +1,160 @@
+package main
+import "fmt"
+//接口定义
+type Sayhello interface{
+	//声明没有实现的方法
+	Sayhello()
+}
+//接口的实现
+type Chinese struct{
+
+}
+//实现接口的方法----》具体实现
+func (person Chinese) Sayhello(){
+	fmt.Println("你好")
+}
+//接口的实现
+//美国人
+type American struct{
+
+}
+//实现接口的方法-----》具体的实现
+func (person American) Sayhello(){
+	fmt.Println("hi")
+}
+//定义函数:专门用来各国人打招呼的函数，接收具备Sayhello接口能力的变量：
+func greet (s Sayhello){
+	s.Sayhello()
+
+}
+func main(){
+	//创建中国人
+    c := Chinese{}
+	//
+	a := American{}
+	greet(a)
+	greet(c)
+}
+
+
+接口中可以定义一组方法，但不需要实现，不需要方法体，并且接口中不能包含任何变量，到某个自定义类型要使用时（实现接口的时候）。再根据具体情况把这个方法具体实现出来
+实现接口要实现所有的方法才是实现
+golang中的接口，不需要显示的实现接口。golang中没有implement关键字
+golang 中实现接口是基于方法的，不是基于接口的
+例如
+A接口 a，b
+B接口 a,b
+C结构体实现了ab方法，那么C实现了A接口，也可以说实现了B接口（只要实现全部方法即可，和实际接口耦合性很低，比java松散的多）
+接口目的是为了定义规范，具体由别人实现
+接口本身不能创建实例，但是可以指向一个实现了该接口的自定义类型的变量
+只要是自定义数据类型，就可以实现接口，不仅仅是结构体类型
+package main
+import "fmt"
+//接口定义
+type Sayhello interface{
+	//声明没有实现的方法
+	Sayhello()
+}
+//接口的实现,结构体
+type Chinese struct{
+
+}
+//自定义数据类型
+type integer int 
+func (i integer) Sayhello(){
+	fmt.Println("say hi" ,i)
+}
+//实现接口的方法----》具体实现
+func (person Chinese) Sayhello(){
+	fmt.Println("你好")
+}
+//接口的实现
+//美国人
+type American struct{
+
+}
+//实现接口的方法-----》具体的实现
+func (person American) Sayhello(){
+	fmt.Println("hi")
+}
+//定义函数:专门用来各国人打招呼的函数，接收具备Sayhello接口能力的变量：
+func greet (s Sayhello){
+	s.Sayhello()
+
+}
+func main(){
+	//创建中国人
+    c := Chinese{}
+	//
+	a := American{}
+	var i integer = 10
+	//var s Sayhello = i
+	i.Sayhello()
+	greet(a)
+	greet(c)
+	greet(i)
+}
+一个自定义类型可以实现多个接口
+package main
+import "fmt"
+type AInterface interface{
+	a()
+}
+type BInterface interface{
+	b()
+}
+type Stu struct{
+
+}
+func (s Stu) a(){
+	fmt.Println("aaaa")
+}
+func (s Stu) b(){
+	fmt.Println("bbbb")
+}
+func main() {
+	var s Stu
+	var a AInterface = s
+	var b BInterface = s
+	a.a()
+	b.b()
+}
+一个接口可以继承多个别的接口，这时如果需要实现A接口，也必须将继承其他接口的方法全部实现
+package main
+import "fmt"
+//接口a
+type CInterface interface{
+	c()
+}
+//接口b
+type BInterface interface{
+	b()
+}
+type AInterface interface{
+	CInterface
+	BInterface
+	a()
+}
+type Stu struct{
+
+}
+func (s Stu) a(){
+    fmt.Println("a")
+}
+func (s Stu)  b(){
+	fmt.Println("b")
+}
+func (s Stu)  c(){
+	fmt.Println("c")
+}
+func main(){
+	var s Stu
+	var a AInterface{} = s 
+	a.a()
+	a.b()
+	a.c()
+
+}
+
+interface类型默认是一个指针(引用类型)，如果没有对interface初始化就使用，那么会输出nil
+空接口没法任何方法，所以可以理解为所有类型都实现了空接口，也可以理解为我们可以把如何一个变量赋值给空接口

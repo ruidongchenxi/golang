@@ -1,0 +1,244 @@
+继承的引入
+当多个结构体存在相同的属性(字段)和方法时，可以从这些结构体中抽象出结构体，在该结构体中定义这些相同的属性方法，其他的结构不需要重新定义这些属性和方法，只需嵌套一个匿名结构体即可。也就是说，在golang中，如果一个struct嵌套了另一个匿名结构体，那么这个结构体可以直接访问匿名结构体，从而实现继承特性
+package main
+import (
+	"fmt"
+)
+type Animal struct{
+    Age int
+	Weight float32
+}
+//绑定方法
+
+func (an *Animal) Shout(){
+	fmt.Println("大声喊叫")
+}
+func (an *Animal) ShowInfo(){
+	fmt.Printf("动物的年龄：%v,动物的体重：%v",an.Age,an.Weight)
+}
+//定义结构体
+type Cat struct{
+	//为了复用性，体现继承思维，加入匿名结构体
+	Animal
+}
+//对cat 绑定特有方法
+func (c *Cat) scratch(){
+	fmt.Println("我是小猫")
+}
+func main(){
+	cat := &Cat{}
+	cat.Animal.Age = 3
+	cat.Animal.Weight = 10.3
+	cat.Animal.Shout()
+	cat.Animal.ShowInfo()
+}
+继承的优点
+提高代码复用、扩展性
+继承的注意事项
+1 结构体可以使用嵌套匿名结构体所有字段和方法，即：首写字母大写或者小写的字段方法都可以
+package main
+import (
+	"fmt"
+)
+type Animal struct{
+    Age int
+	wight float32
+}
+//绑定方法
+
+func (an *Animal) shout(){
+	fmt.Println("大声喊叫")
+}
+func (an *Animal) showInfo(){
+	fmt.Printf("动物的年龄：%v,动物的体重：%v",an.Age,an.wight)
+}
+//定义结构体
+type Cat struct{
+	//为了复用性，体现继承思维，加入匿名结构体
+	Animal
+}
+//对cat 绑定特有方法
+func (c *Cat) scratch(){
+	fmt.Println("我是小猫")
+}
+func main(){
+	cat := &Cat{}
+	cat.Animal.Age = 3
+	cat.Animal.wight = 10.3
+	cat.Animal.shout()
+	cat.Animal.showInfo()
+}
+
+
+2.匿名结构体字段访问可以简化
+package main
+import (
+	"fmt"
+)
+type Animal struct{
+    Age int
+	wight float32
+}
+//绑定方法
+
+func (an *Animal) shout(){
+	fmt.Println("大声喊叫")
+}
+func (an *Animal) showInfo(){
+	fmt.Printf("动物的年龄：%v,动物的体重：%v",an.Age,an.wight)
+}
+//定义结构体
+type Cat struct{
+	//为了复用性，体现继承思维，加入匿名结构体
+	Animal
+}
+//对cat 绑定特有方法
+func (c *Cat) scratch(){
+	fmt.Println("我是小猫")
+}
+func main(){
+	cat := &Cat{}
+	//简化访问
+	cat.Age = 3
+	cat.wight = 10.3
+	cat.shout()
+	cat.showInfo()
+}
+
+3.当结构体和匿名结构体有相同的字段和方法时，编译器采用就近访问原则，如果希望访问匿名结构体的字段和方法，可以通过匿名结构体名字区分
+package main
+import (
+	"fmt"
+)
+type Animal struct{
+    Age int
+	Weight float32
+}
+//绑定方法
+
+func (an *Animal) Shout(){
+	fmt.Println("大声喊叫")
+}
+func (an *Animal) ShowInfo(){
+	fmt.Printf("动物的年龄：%v,动物的体重：%v\n",an.Age,an.Weight)
+}
+//定义结构体
+type Cat struct{
+	//为了复用性，体现继承思维，加入匿名结构体
+	Animal
+	Weight float32
+}
+//对cat 绑定特有方法
+func (c *Cat) scratch(){
+	fmt.Println("我是小猫")
+}
+func (c *Cat) ShowInfo(){
+	//Weight : 13.8,
+	fmt.Printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~动物的年龄：%v,动物的体重：%v\n",c.Age,c.Weight)
+}
+func main(){
+	cat := &Cat{}
+	cat.Animal.Age = 3
+	cat.Animal.Weight = 10.3
+	cat.Animal.Shout()
+	cat.Animal.ShowInfo()// 匿名结构体名字区分
+	cat.Weight = 13.8// 就近原则
+	cat.ShowInfo()
+}
+
+4.golang 中支持多继承： 如一个结构体嵌套了多个匿名结构体，那么该结构体可以直接访问嵌套的匿名结构体的字段和方法，从而实现了多层继承，为了保证代码的简洁性，建议尽量不使用多重继承，狠多语言将多重继承去除了，但go中保留了
+package main
+import (
+	"fmt"
+)
+type A struct{
+	a int
+	b string
+}
+type B struct{
+	c int
+	d string
+}
+type C struct{
+	A
+	B
+}
+func main(){
+	c := C{A{10,"aaa"},B{20,"bbb"}}
+	fmt.Println(c)
+}
+
+5.如嵌套的匿名结构体有相同的字段名或方法名，则在访问时，需要通过匿名结构体类型名字区分
+package main
+import (
+	"fmt"
+)
+type A struct{
+	a int
+	b string
+}
+type B struct{
+	c int
+	d string
+	a int
+}
+type C struct{
+	A
+	B
+}
+func main(){
+	c := C{A{10,"aaa"},B{20,"bbb",89}}
+    fmt.Println(c.A.a)
+	fmt.Println(c.B.a)
+	fmt.Println(c.b)
+}
+
+6.结构体的匿名字段是基本数据类型
+7. 嵌套匿名结构体后，也可以在创建结构体变量（实例）时，直接指定各个匿名结构体字段的值
+8. 嵌套匿名结构体的指针也是可以的
+9. 结构体字段可以是结构体类型的 
+package main
+import (
+	"fmt"
+)
+type A struct{
+	a int
+	b string
+}
+type B struct{
+	c int
+	d string
+	a int 
+}
+type C struct{
+	A
+	B
+	int
+}
+type D struct{
+	a int 
+	b int 
+	c B
+}
+func main(){
+	d := D{10,20,B{23,"ppp",99}}
+	fmt.Println(d)
+	fmt.Println(d.c.d)
+	//构造C结构体的实例化
+	//
+	//c := C{A{10,"aaa"},B{20,"bbb",89},17}
+	c := C{
+		A{
+			a : 10 ,
+			b : "aa",},
+		B{
+			c : 54,
+			d : "福贵",
+			a : 98, },
+		75,
+	}
+    fmt.Println(c.A.a)
+	fmt.Println(c.B.a)
+	fmt.Println(c.b)
+	fmt.Println(c.int)
+}

@@ -1,0 +1,165 @@
+管道定义：
+var 变量名字 chan 数据类型
+PS1 chan 管道关键字
+PS2 数据类型指的管道的类型。里面存放的数据类型，管道是有类型的，intChan只能写入整数int
+PS3 管道是引用数据类型，必须初始化才能写入数据，即make后才能使用
+package main
+import (
+	"fmt"
+	//"strconv"
+	//"time"
+)
+func main(){
+	//定义管道
+	var intChan chan int
+	//通过make 初始化,管道可以存放3个int类型的数据
+	intChan = make( chan int,3)
+	//证明管道是引用数据类型
+	fmt.Printf("intCha的值：%v\n",intChan)
+	//向管道存放数据
+	intChan<- 10
+	num := 20
+	intChan<- num
+	intChan<- 50
+	//不能存放大于容量的数据
+	//从管道中读取数据
+	num1 := <- intChan
+	fmt.Println(num1)
+	num2 := <- intChan
+	fmt.Println(num2)
+	num3 := <- intChan
+	fmt.Println(num3)
+	//在没有使用协程的情况下，如果管道的数据全部取出，那么再取就会报错
+	num4 := <- intChan
+	fmt.Println(num4)
+	//输出管道长度
+	fmt.Printf("管道实际的场地%v,管道容量%v\n",len(intChan),cap(intChan))
+}
+关闭管道
+func close func close(c chan<- Type)
+内建函数close关闭信道，该通道必须为双向的或只发送的。它应当只由发送者执行，而不应由接收者执行，其效果是在最后发送的值被接收后停止该通道。在最后的值从已关闭的信道中被接收后，任何对其的接收操作都会无阻塞的成功。对于已关闭的信道，语句： x, ok := <-c
+还会将ok置为false。
+
+package main
+import (
+	"fmt"
+	//"strconv"
+	//"time"
+)
+func main(){
+	//定义管道
+	var intChan chan int
+	//通过make初始化：管道可以存放3个int类型的数据
+	intChan = make(chan int,3)
+	//在管道中存放数据
+	intChan<- 10
+	intChan<- 20
+	//关闭管道
+	close(intChan)
+	//再次写入
+	//intChan<- 80
+	//读取数据
+	num := <- intChan
+	fmt.Println(num)
+
+}
+
+
+
+
+管道遍历
+管道支持for-range 的方式进行遍历，请注意两个细节
+在遍历时，如果管道没有关闭，则会出现deadlock的错误
+在遍历时，如果管道关闭，则正常遍历，遍历完成后，就会退出遍历
+package main
+import (
+	"fmt"
+)
+func main(){
+	var intChan chan int
+	intChan = make(chan int,100)
+	for i :=10; i<100;i++{
+		//t := i+1
+		intChan<- i+1
+	}
+	//关闭管道
+	close(intChan)
+	//遍历
+	for v := range intChan {
+        fmt.Println(v)
+	}
+}
+
+
+
+题
+清完成协程和管道协调工作，具体案例
+开启一个writeData协程，向管道中写入50个整数
+开启一个readData协程，从管道中读取writeData
+注意：writeData和readData操作同一个管道
+主线需要等待writeData和reaData协程都完成工作才能退出
+package main
+import(
+	"fmt"
+	"time"
+	"sync"
+)
+var wg sync.WaitGroup
+//写
+func writData(intChan chan int){
+	defer wg.Done()
+	for i := 1; i<=50;i++{
+		intChan<- i
+		fmt.Println("已经写入",i)
+	    time.Sleep(time.Second)
+	}
+	close(intChan)
+}
+//读
+func readData(intChan chan int){
+	//遍历
+	defer wg.Done()
+	for v := range intChan{
+		fmt.Println("读取的数据",v)
+		time.Sleep(time.Second)
+	}
+}
+func main(){
+	wg.Add(2)
+	//定义管道
+	intChan := make(chan int,50)
+	//写协程
+    go writData(intChan)
+	//读协程
+	go readData(intChan)
+	wg.Wait()
+}
+管道可以声明为只读或者只写性质
+
+package main
+import(
+	"fmt"
+)
+func main(){
+	//默认情况下，管道是双向的---->可读可写
+	
+	//声明为只写
+	var intChan1 chan<- int//管道具备<只写性值
+    //初始化
+	intChan1 = make(chan int,3) 
+	//声明只写
+	intChan1 <- 20
+	//num :=<- intChan1 报错
+	fmt.Println("intChan1: ",intChan1)
+	//fmt.Println("num",num)
+    var intChan2 <-chan int//只读管道
+	intChan2 = make(chan int,3)
+	//num :=<- intChan2
+    if intChan2 != nil {
+		num :=<- intChan2
+		fmt.Println("num",num)  报错
+	}
+}
+管道阻塞
+当管道只写入代码，没有读取，就会出现阻塞
+写快读慢(管道读写速率不一样)，不会阻塞
