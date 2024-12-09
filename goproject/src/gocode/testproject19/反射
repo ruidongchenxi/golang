@@ -1,0 +1,4 @@
+获取变量类别
+1 reflect.Type.Kind()
+2. reflect.Value.Kind()
+kind的值是常量值
