@@ -7,7 +7,7 @@ func main(){
 	//2.变量赋值
 	age = 17
 	//3.变量使用
-	fmt.Println("age="，age)
+	fmt.Println("age=" , age)
 	//变量的重复定义错误
 	//var age int = 9
 	

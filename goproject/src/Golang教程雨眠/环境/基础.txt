@@ -1,0 +1,17 @@
+设置go 代理
+首先开启go module
+go env -w GO111MODULE=on     // Windows  export GO111MODULE=on        // macOS 或 Linux
+.配置goproxy:
+阿里配置： 
+go env -w GOPROXY=https://mirrors.aliyun.com/goproxy/       // Windows  
+export GOPROXY=https://mirrors.aliyun.com/goproxy/          // macOS 或 Linux
+ 七牛云配置：
+ go env -w GOPROXY=https://goproxy.cn      // Windows  
+export GOPROXY=https://goproxy.cn         // macOS 或 Linux
+go  env
+
+
+golang debug
+1 本地调试
+2 附加到进程
+3 远程调试
