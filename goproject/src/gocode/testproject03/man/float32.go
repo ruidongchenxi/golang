@@ -29,5 +29,5 @@ D:\golang\goproject\src\gocode\testproject03\man>go run float32.go
    var  cx6 float64 = 125.000000000056
    fmt.Println(cx6)
    var cx7 = 8.0000965499008
-   fmt.Printf
+   fmt.Println(cx7)
 }

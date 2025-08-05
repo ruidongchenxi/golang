@@ -1,0 +1,37 @@
+go build -o  指定名字
+go build -o D:\golang\goproject\src\src01\demo1/你好.exe D:\golang\goproject\src\src01\demo1\main.go 
+
+
+源文件以"go"为扩展名字
+程序执行入口是main()函数
+严格区分大小写
+方法由一条条语句构成，每个语句后面不需要分号（go语言会在每行后自动加分号），这也体现了golang的简洁性
+go编译器是一行行进行编译的，因此我们一行就写一条语句，不能把多条语句写在同一行，否则报错
+定义的变量或者import 的包如果没有使用到，代码编译不通过
+大括号都是成对出现的，缺一不可
+go 语言的注释
+行注释 // VScode 快捷键： ctrl +/  再按一次取消注释
+块注释（多行注释）// VScode 快捷键： shift+atl+a 再按一下取消
+注意：块注释中不可以嵌套注释
+
+
+代码风格
+注意缩进
+向后缩进：tab 
+向前取消缩进：shift + tab
+通过命令行完成格式化缩进
+gofmt -w 源码文件.go //调整格式并写入源文件里
+gofmt 源码文件.go //调整格式后输出并不会修改源文件格式
+输出特别长换行要这么写，否则报错
+package main //声明包，每个go文件必须有归属包
+import "fmt" //导入工具包，使用
+func main(){ // main 主函数
+	fmt.Println("你好")// 打印输出内容
+	var age = 10 +9
+	fmt.Println(age) 
+	fmt.Println("qqqqqqqqqq",
+	"qqqqqqqqqqqq",
+	"qqqqqqqqqqqq",
+	"qqqqqqqqqqqq",
+	"qqqqqqqqqqqqq")
+}
