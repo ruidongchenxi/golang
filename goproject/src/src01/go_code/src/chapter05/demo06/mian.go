@@ -17,7 +17,17 @@ func stest (n1 int,n2 int) (sum int, sub int){// 指定返回
 	return
 }
 
-func main() {
+func sum1(n1 int,age... int) (sum int){
+	sum = n1
+    for i :=0; i<len(age);i++{
+		sum +=age[i]//表示age[0],表示取出age切片第一个值，其他一次类推
+	}
+	return
+}
+func sun2 (n1,n2 *int) {
+	n1,n2=n2,n1
+}
+func main(){	
 	a := sum
 	fmt.Printf("a的类型%T,sum类型%T\n",a,sum)
 	res :=a(10,20)
@@ -37,7 +47,15 @@ func main() {
 	res3 := mytest(sum,50,56)
 	fmt.Println("res3=",res3)	
     res4,res5 := stest(9,7)
-	fmt.Printf("两数和%v，两数差%v",res4,res5)
+	fmt.Printf("两数和%v，两数差%v\n",res4,res5)
+	res6 := sum1(1,7,90,99)
+	fmt.Println("res6=",res6)
+	n6 := 12
+	n7 := 56
+	fmt.Printf("调用函数前n6=%v,n7=%v\n",n6,n7)
+	sun2(&n6,&n7)
+
+	fmt.Printf("调用函数后n6=%v,n7=%v\n",n6,n7)
 
 
 }
@@ -51,3 +69,4 @@ func main() {
 // Num2= 40
 // res3= 106
 // 两数和16，两数差2
+// res6= 197
