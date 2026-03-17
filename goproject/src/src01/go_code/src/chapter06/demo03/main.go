@@ -30,7 +30,7 @@ func main(){
 	fmt.Println("man",arr02)
 	test1(&arr02)
 	fmt.Println("man",arr02)
-
+	
 	
 }
 // 执行结果
