@@ -5,6 +5,7 @@ import (
 type Person struct{
 	Num string
 }
+
 //给A类型绑定一份方法
 func (p Person)test(){// A 结构体有一个方法
 	fmt.Println("test()",p.Num)
@@ -34,20 +35,23 @@ type Circle struct{
 	radius float64
 }
 func (c Circle) ares() float64{
-	//var t float64
 	return c.radius*c.radius*3.14
 }
+func (c *Circle) ares2() float64{
+	//因为c是一个指针结构体实例，因此标准的访问其字段的方式是.(*c).radius
+	return (*c).radius*(*c).radius*3.14
+}
 func main(){
-	// w:=Person{"cx"}
-	// // w.test()
-	// // w.speak()
-	// // w.jisuan()
-	// // w.jisuan1(60)
-	// fmt.Printf("45+89=%v\n",w.getSum(45,89))
 	r := Circle{85}
-	fmt.Printf("半径是%v,的圆的面积%v\n",r.radius,r.ares())
-//	fmt.Printf("半径是%v,的圆的面积%v\n",r.radius,r.ares) 不可以这样写，方法调用必须加(),否则就输出方法的地址值
+	fmt.Printf("ares1()方法的输出半径是%v,的圆的面积%v\n",r.radius,r.ares())//	fmt.Printf("半径是%v,的圆的面积%v\n",r.radius,r.ares) 不可以这样写，方法调用必须加(),否则就输出方法的地址值
+	t := Circle{76}
+	// fmt.Printf("ares2()方法的输出半径是%v,的圆的面积%v\n",t.radius, (&t).ares2())
+	//编译器底层做了优化(&t).ares2()等价于t.ares2()
+	//因为编译器底层添加了&
+	fmt.Printf("ares2()方法的输出半径是%v,的圆的面积%v。。。。。\n",t.radius, t.ares2())
+
 }
 //执行结果
 // PS D:\golang\goproject\src\src01\go_code\src> go run chapter09\deom05\main.go
-// 半径是85,的圆的面积22686.5
+// ares1()方法的输出半径是85,的圆的面积22686.5
+// ares2()方法的输出半径是76,的圆的面积18136.64。。。。。
