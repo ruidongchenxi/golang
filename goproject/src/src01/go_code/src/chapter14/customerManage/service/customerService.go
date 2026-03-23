@@ -84,6 +84,7 @@ func (this *CustomerService) FindByld(id int) int{
 		return -1
 	}
 }
+//判断输入ID号是否存在
 func (this *CustomerService) FindID(id int) bool{
 	//var t int 
 	var b bool
@@ -95,10 +96,10 @@ func (this *CustomerService) FindID(id int) bool{
 	}
 	return b
 }
+//修改 需要传入的参数 用户名及ID
 func (this *CustomerService)Revise(Customer model.Customer,id int){
 	//确定id 规则
 	Customer.Id=id
 	index :=this.FindByld(id)
-	//this.coustmers = append(this.coustmers[index:],append(this.coustmers{Customer},this.coustmers[index:]...)...)
 	this.coustmers[index]=Customer
 }

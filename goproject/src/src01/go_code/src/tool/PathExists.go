@@ -1,0 +1,15 @@
+package tool
+import (
+	"os"
+)
+func PathExists(path string) (bool ,error){
+	_,err:=os.Stat(path)
+	if err ==nil{ //文件存在
+		return true ,nil
+	}
+	if os.IsExist(err){ //
+		return false, nil
+	}
+	return false,err
+
+}
