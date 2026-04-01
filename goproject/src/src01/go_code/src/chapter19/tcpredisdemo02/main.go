@@ -3,10 +3,19 @@ import (
 	"github.com/redis/go-redis/v9"
 	"fmt"
 	"context"
-	"time"
+	//"time"
 
 )
 func main(){
+	var  name string
+	var  age int
+	var skill string
+	fmt.Println("输入名字")
+	fmt.Scanln(&name)
+	fmt.Println("输入年龄")
+	fmt.Scanln(&age)
+	fmt.Println("职业")
+	fmt.Scanln(&skill)
 	ctx := context.Background()
 	//通过go 向redis 写数据 
 	conn:=redis.NewClient(&redis.Options{
@@ -20,33 +29,19 @@ func main(){
 		//return
 	}
 	fmt.Println("连接 Redis 成功 ✅")
+	
+
 	//写数据
-	err = conn.Set(ctx,"name","chenxi",0).Err()
-	if err !=nil{
-		panic(err)
-	}
-	err= conn.HSet(ctx,"users",map[string]interface{}{
-		"name1": "小鹿",
-		"age": 18,
-		"job": "golang",
-	}).Err()
-	// 4. 读数据
-	val, err := conn.Get(ctx, "name").Result()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(val)
-	//读数据
-	val1,err := conn.HMGet(ctx, "users","name1","age","job").Result()
-	fmt.Println(val1)
-	//批量操作数据
-	err = conn.MSet(ctx,"name2","chenxi","age",19,"Address","河北").Err()
-	if err != nil {
-		panic(err)
-	}
-	//批量获取多个数据
-	val2,err:=conn.MGet(ctx,"name2","age","Address").Result()
-	fmt.Println(val2)
+	// err = conn.Set(ctx,"name","chenxi",0).Err()
+	// if err !=nil{
+	// 	panic(err)
+	// }
+	// err= conn.HSet(ctx,"users",map[string]interface{}{
+	// 	"name1": name,
+	// 	"age": age,
+	// 	"job": skill,
+	// }).Err()
+
 	/*
 	pipe.MGet(...) 没有执行，所以拿不到数据
 	二、Pipeline 的本质（你必须理解）
@@ -93,30 +88,31 @@ cmd.Val()
 先收集 → 再统一执行 → 再取结果
 	*/
 	pipe := conn.Pipeline()
-	pipe.Set(ctx, "name", "chenxi", time.Minute)
-	pipe.Set(ctx, "age", 28, time.Minute)
+	var3:=pipe.HSet(ctx,"user",map[string]interface{}{
+		"name":name,
+		"age":age,
+		"skill":skill,
+	})
+	ge:=pipe.HGetAll(ctx,"user")
 	_, err = pipe.Exec(ctx)
-	if err != nil {
-    	panic(err)
-	}	
-	// var3,err:=pipe.MGet(ctx, "name","age").Result()
-	var3:= pipe.MGet(ctx, "name", "age")
-	_, err = pipe.Exec(ctx)
-	if err != nil {
-    	panic(err)
+	if err !=nil{
+		fmt.Println("你好")
 	}
-	fmt.Println(var3.Val())
-
-	for i ,v:= range var3.Val(){
-		fmt.Printf("var3[%d]=%s\n",i,v)
+	fmt.Println("这次新写入的字段数量",var3.Val())
+	for i,k := range ge.Val(){
+		fmt.Printf("var3[%v]=%v\n",i,k)
 	}
  }
 //执行结果
-// PS D:\golang\goproject\src\src01\go_code\src> go run chapter19\tcpredisdemo01\main.go
-// 连接 Redis 成功 ✅
+// PS D:\golang\goproject\src\src01\go_code\src> go run chapter19\tcpredisdemo02\main.go
+// 输入名字
 // chenxi
-// [小鹿 18 golang]
-// [chenxi 19 河北]
-// [chenxi 28]
-// var3[0]=chenxi
-// var3[1]=28
+// 输入年龄
+// 15
+// 职业
+// java
+// 连接 Redis 成功 ✅
+// 这次新写入的字段数量 3
+// var3[name]=chenxi
+// var3[age]=15
+// var3[skill]=java
