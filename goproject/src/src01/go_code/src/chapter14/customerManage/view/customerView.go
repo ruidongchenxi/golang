@@ -4,8 +4,8 @@ import (
 	"fmt"
 	//"time"
 	//"net"
-	"src01/go_code/src/chapter14/customerManage/model"
-	"src01/go_code/src/chapter14/customerManage/service"
+	"src/chapter14/customerManage/model"
+	"src/chapter14/customerManage/service"
 )
 type coustmerView struct{
 	key string

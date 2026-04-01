@@ -1,7 +1,7 @@
 package main
 import (
 	"fmt"
-	"src01/go_code/src/chapter10/deom03/model"
+	"src/chapter10/deom03/model"
 )
 func main(){
 	t := model.ChuShi("123456",89,"123456")

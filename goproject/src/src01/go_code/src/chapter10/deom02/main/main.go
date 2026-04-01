@@ -3,7 +3,7 @@ package main
 import (
 	//"fmt"
 	//"fmt"
-	"src01/go_code/src/chapter10/deom02/model"
+	"src/chapter10/deom02/model"
 )
 func main(){
 	s:=model.NewPerson("晨曦")

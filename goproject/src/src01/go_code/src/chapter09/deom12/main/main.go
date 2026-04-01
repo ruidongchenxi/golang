@@ -1,7 +1,7 @@
 package main
 import (
 	"fmt"
-	"src01/go_code/src/chapter09/deom12/model"//引包
+	"src/chapter09/deom12/model"//引包
 )
 func main(){
 	//实例化student结构体

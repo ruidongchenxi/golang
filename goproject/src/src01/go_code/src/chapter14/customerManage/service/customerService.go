@@ -4,7 +4,7 @@ import (
 	//"fmt"
 	//"fmt"
 	//"fmt"
-	"src01/go_code/src/chapter14/customerManage/model"
+	"src/chapter14/customerManage/model"
 )
 
 //该结构体完成对customer的操作包括增删改查

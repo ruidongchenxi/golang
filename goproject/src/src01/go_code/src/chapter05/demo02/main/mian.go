@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	util "src01/go_code/src/chapter05/demo02/utils"// 引用包,取别名
+	util "src/chapter05/demo02/utils"// 引用包,取别名
 )
 func main() {
 	var  s int 

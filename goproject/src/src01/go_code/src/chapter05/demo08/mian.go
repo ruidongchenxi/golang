@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"src01/go_code/src/chapter05/demo08/utils" //导入函数
+	"src/chapter05/demo08/utils" //导入函数
 )
 var  age int = test()
 func test() int{
