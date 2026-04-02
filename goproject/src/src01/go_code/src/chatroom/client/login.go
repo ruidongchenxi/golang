@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net"
 	"src/chatroom/common/message"
-	"time"
+	//"time"
 )
 
 //写一个函数完成登录
@@ -62,8 +62,26 @@ func login(id int,pwd string) (err error){
 		return
 	}
 	//这里需要处理服务器端返回的消息
-	fmt.Println("休眠20秒")
-	time.Sleep(20*time.Second)
-	
+	mes,err=ReadPkg(conn)//
+	if err !=nil{
+		//接收失败
+		fmt.Println("接收失败",err)
+		return
+	}
+	//将mes 的data 部分反序列化
+	var  loginResMes message.LoginResMes
+	err = json.Unmarshal([]byte(mes.Data),&loginResMes)
+	//json.Unmarshal([]byte(mes.Data),&loginResMes)
+	// if loginResMes.Code==200 {
+	// 	fmt.Println("登录成功")
+	// }else if loginResMes.Code==500{
+	// 	fmt.Println("失败",loginResMes.Error)
+	// }
+	switch loginResMes.Code{
+	case 200:
+		fmt.Println("登录成功")
+	case 500:
+		fmt.Println("失败",loginResMes.Error)
+	}
 	return 
 }

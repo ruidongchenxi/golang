@@ -45,12 +45,8 @@ func main(){
 		fmt.Println("输入用户密码")
 		fmt.Scan(&userPwd)
 		//登录函数写到另一个文件
-		err:=login(userId,userPwd)
-		if err !=nil{
-			fmt.Println("登录失败")
-		}else {
-			fmt.Println("登录成功")
-		}
+		login(userId,userPwd)
+		
 
 	}else if key ==2 {
 		fmt.Println("注册用户")
