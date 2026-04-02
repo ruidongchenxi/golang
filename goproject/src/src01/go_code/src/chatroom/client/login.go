@@ -1,0 +1,69 @@
+package main
+
+import (
+	"encoding/binary"
+	"encoding/json"
+	"fmt"
+	"net"
+	"src/chatroom/common/message"
+	"time"
+)
+
+//写一个函数完成登录
+func login(id int,pwd string) (err error){
+   //下一步定义协议
+//    fmt.Println("你好")
+//    return nil
+// 连接服务器
+	conn,err:=net.Dial("tcp","localhost:8889")
+	if err != nil{
+		fmt.Println("连接失败")
+		return err
+	}
+	//延迟关闭
+	defer conn.Close()
+	//准备通过con 发生消息
+	var mes message.Message
+	mes.Type=message.LoginMesType
+	//创建一个loginmes
+	var loginMes message.LoginMes
+	loginMes.UserId=id
+	loginMes.UserPwd=pwd
+	data,err:=json.Marshal(loginMes)
+	if err !=nil{
+		fmt.Println("序列化失败")
+		return err		
+	}
+	//5.把data 赋给了mes.Data
+	mes.Data=string(data)
+	//6.将mes序列化
+	data,err= json.Marshal(mes)
+	if err != nil{
+		fmt.Println("消息序列化失败")
+		return err
+	}
+	//data 就是是我们要发生的数据；根据原先规则先发送一个长度
+	//先把data 长度，将data长度转成可以表示长度byte切片
+	pkgLen:=uint32(len(data))
+	var buf [4]byte
+	binary.BigEndian.PutUint32(buf[0:4],pkgLen)
+	n,err:=conn.Write(buf[:4])
+	if  n!=4 || err!=nil {
+		fmt.Println("发生失败")
+		return err
+	}
+	// fmt.Println("消息长度发生成功")
+	// fmt.Println("客户端发送长度:",len(data))
+	// fmt.Println("客户端发内容:",string(data))
+	//发送消息本身
+	n,err=conn.Write(data)
+	if err !=nil {
+		fmt.Println("发送失败")
+		return
+	}
+	//这里需要处理服务器端返回的消息
+	fmt.Println("休眠20秒")
+	time.Sleep(20*time.Second)
+	
+	return 
+}

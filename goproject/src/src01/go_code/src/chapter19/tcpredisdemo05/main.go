@@ -24,7 +24,7 @@ func main() {
 	var wg sync.WaitGroup
 
 	// 模拟100个并发请求
-	for i := 0; i < 10; i++ {
+	for i:= 0; i < 10; i++ {
 		wg.Add(1)
 
 		go func(i int) {

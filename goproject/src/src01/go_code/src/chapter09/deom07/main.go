@@ -11,10 +11,6 @@ type Student struct{
 	score float64
 }
 func (s Student)say() string{
-	//var t string
-	// strconv.Itoa(s.age) int 转字符串 strconv.FormatFloat(s.score, 'f', -1, 64) flost54 转字符串
-//	t:=s.Name+" "+s.gender+" "+ strconv.Itoa(s.age)+" "+  strconv.Itoa(s.id) +" "+strconv.FormatFloat(s.score, 'f', -1, 64)
-	//方式2
 	t := fmt.Sprintf("Student 的信息 name=[%v],gender=[%v],age=[%v],id=[%v],score=[%v]",
 	s.Name,s.gender,s.age,s.id,s.score)
 	return t
