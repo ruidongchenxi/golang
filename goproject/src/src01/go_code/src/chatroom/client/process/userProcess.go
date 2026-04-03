@@ -22,7 +22,7 @@ func (this *UserProcess)Register(userId int,
 	//延迟关闭
 	defer conn.Close()
 	var mes message.Message
-	mes.Type=message.RegisterResMesType
+	mes.Type=message.RegisterMesType
 	var RegisterMes message.RegisterMes
 	// RegisterResMes.User.UserId=userId
 	// RegisterResMes.User.UserPwd=userPwd

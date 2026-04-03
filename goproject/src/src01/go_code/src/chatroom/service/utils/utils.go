@@ -6,6 +6,7 @@ import(
 	"encoding/binary"
 	//"errors"
 	"encoding/json"
+	"io"
 )
 type Transfer struct{
 	Conn net.Conn
@@ -18,7 +19,7 @@ func (tran *Transfer)ReadPkg() (mes message.Message,err error){
 	fmt.Println("等待读取数据~~~~")
 	//conn.Read 在con没有被关闭情况下，才会阻塞
 	//如果有任意一方关闭连接，则不会阻塞，返回
-	_,err=tran.Conn.Read(tran.Buf[:4])
+	_,err=io.ReadFull(tran.Conn,tran.Buf[:4])
 	if err!=nil{
 		//err = errors.New("red pkg header error")
 		return
@@ -26,9 +27,9 @@ func (tran *Transfer)ReadPkg() (mes message.Message,err error){
 	//fmt.Println("读到的内容=",buf[:4])
 	//根据读到buf[:4] 转成uint32类型
 	pkgLen :=binary.BigEndian.Uint32(tran.Buf[:4])
-	fmt.Println(pkgLen)
+	//fmt.Println(pkgLen)
 	//根据pkgLen 读取消息内容
-	n,err := tran.Conn.Read(tran.Buf[:pkgLen])//从连接里读数据写到buf 切片里
+	n, err := io.ReadFull(tran.Conn, tran.Buf[:pkgLen])//从连接里读数据写到buf 切片里
 	if n!=int(pkgLen)|| err!=nil{
 		//err = errors.New("red pkg body error")
 		return 
