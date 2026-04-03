@@ -10,6 +10,7 @@ import (
 var (
 	userId int
 	userPwd string
+	userName string
 )
 func main(){
 	//接收用户选择
@@ -36,7 +37,15 @@ func main(){
 
 			case 2:
 				fmt.Println("注册用户")
+				fmt.Println("请输入id")
+				fmt.Scan(&userId)
+				fmt.Println("输入密码")
+				fmt.Scan(&userPwd)
+				fmt.Println("输入名字")
+				fmt.Scan(&userName)
 				//loop=false
+				up:=&process.UserProcess{}
+				up.Register(userId,userPwd,userName)
 			case 3:
 				fmt.Println("退出聊天室")
 				//loop=false

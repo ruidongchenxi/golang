@@ -1,11 +1,15 @@
 package message
 
 //import "go/types"
-//
+
+// import(
+// 	"src/chatroom/service/model"
+// )
 const(
 	LoginMesType = "LoginMes"
 	LoginResMesType = "LoginResMes"
 	RegisterMesType = "RegisterMes" 
+	RegisterResMesType = "RegisterResMes"
 
 )
 
@@ -25,5 +29,9 @@ type LoginResMes struct{
 	Error string `json:"error"`//
 }
 type RegisterMes struct{
-	
+	User User `json:"user"` 	
+}
+type RegisterResMes struct{
+	Code int `json:"code"`// 返回状态码 400表示用户占用；200 表示注册成功
+	Error string `json:"error"`
 }

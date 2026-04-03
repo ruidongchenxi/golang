@@ -22,13 +22,18 @@ func (this *Processor)ServiceProcessMes(mes *message.Message) (err error){
 		err =up.ServiceProcessLogin(mes)
 	case message.RegisterMesType:
 		//处理注册
+		up :=&process2.UserProcess{
+			Conn: this.Conn,
+		}
+		err =up.ServiceProcessRegister(mes)
+
 	default:
 		fmt.Println("消息类型不存在，无法处理")
 
 	}
 	return 
 }
-func (this *Processor)Process2()(err error){
+func (this *Processor)Process()(err error){
 	for {
 	//这里将读取数据包，直接封装成一个函数readPkg(),返回Messahe,err
 	//等待读取
@@ -39,23 +44,24 @@ func (this *Processor)Process2()(err error){
 		mes,err:= tf.ReadPkg()
 		if err !=nil {
 			if err == io.EOF{
-				//fmt.Println("客户端关闭连结，服务端也关闭")
-				return err
+				fmt.Println("客户端关闭连结，服务端也关闭")
+				return  err
 				
 			}else{
 				fmt.Println("获取连接序列化失败",err)
-				return err
-				
+				//return 
 			}
 		}
+		
 	//	fmt.Println("mes=",mes)
 		err = this.ServiceProcessMes(&mes)
 		if err !=nil {
-			return err
+			//return 
 		
 		}
 		
 	}
+	
 	
 
 }

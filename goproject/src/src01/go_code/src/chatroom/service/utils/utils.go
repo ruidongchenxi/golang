@@ -26,6 +26,7 @@ func (tran *Transfer)ReadPkg() (mes message.Message,err error){
 	//fmt.Println("读到的内容=",buf[:4])
 	//根据读到buf[:4] 转成uint32类型
 	pkgLen :=binary.BigEndian.Uint32(tran.Buf[:4])
+	fmt.Println(pkgLen)
 	//根据pkgLen 读取消息内容
 	n,err := tran.Conn.Read(tran.Buf[:pkgLen])//从连接里读数据写到buf 切片里
 	if n!=int(pkgLen)|| err!=nil{
@@ -61,5 +62,4 @@ func (tran *Transfer)WritePkg(data []byte) (err error){
 	}
 
 	return
-
 }
