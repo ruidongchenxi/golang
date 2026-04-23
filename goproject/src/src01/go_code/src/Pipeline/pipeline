@@ -1,0 +1,221 @@
+1.1 agent (代理)
+agent 指定流水钱的执行节点
+参数
+any 在任何可用节点上执行Pipeline
+none 没有指定agent的时候默认
+label 在指定标签上运行Pipeline
+node 允许额外的选项
+下面两种一样的
+agent {node {label 'labelname'}}
+agent {label 'labelname'}
+1.2 post 
+定义一个或多个steps,这些阶段根据流水钱或阶段的完成情况而运行(取决于流水钱中post部分位置)。post支持以下post-condition块中其中之一：always,changed,failure,success,unstable,aborted。这些条件块允许在post部分的步骤的执行取决于流水钱阶段完成状态
+always无论流水线或者阶段完成状态
+changed只有当流水线或者阶段完成状态与之前不同时
+failure只有当流水线或者阶段状态为failure运行
+success只有当流水线或者阶段状态为success运行
+unstable 只有当流水线或者阶段状态为unstable运行，例如测试失败
+aborted 只有当流水线或者阶段状态为aborted运行。手动取消
+1.3 stages(阶段)
+包含一系列一个或多个stage指令，建议stages至少包含一个stage指令用于交付过程的每个离散部分，比如测试、构建、部署
+pipeline{
+	agent any
+	stages{
+		stage('Example'){//阶段
+			steps{ //步骤
+				echo "Hello World"
+			}
+		}
+	}
+}
+1.4 steps(步骤)
+steps 是每个中要执行的每个步骤
+1.5 environment
+environment 指令指定一个键值对序列，该序列将被定义为所有步骤的环境变量，或者特定于阶段的步骤，取决于environment指定在流水线内的位置
+该指令支持一个特殊方法credentials(),该方法可用于jenkins 环境中通过标识符访问预定义的凭证。对于类型为"Secret Text"的凭证。credentials()将确保指定的环境变量包含秘密文本内容，对于类型为"SStandard username and password" 的凭证，指定的环境变量指定为username:password,并且两个额外的环境变量将自动定义：分别为MYVARNAME_USE和MYVARNAME_PSW
+pipeline{
+	agent any
+	environment{
+		CC = 'clang'
+	}
+	stages{
+		stage('Example'){
+			environment{
+				AN_ACCESS_KEY =credentials('my-prefined-secret-text')
+			}
+			stage{
+				sh 'printenv'
+			}
+		}
+	}
+}
+1.5.2 options
+options 指令允许从流水线内部配置特定流水项选项。流水线提供了许多这样的选项，比如buildDiscarder.但也可以由插件提供，比如timestamps
+buildDiscarder:为最近的流水线运行的特定数量保存组件和控制台输出
+disableConcurrentBuilds：不允许同时执行流水线，可被用来防止同时访问共享资源
+overrideIndexTriggers：允许覆盖分支索引触发器默认处理
+skipDefaultCheckout：在agen指令中。跳过从源代码控制检出代码默认情况；该指令会跳过从源代码控制系统检出代码的操作agent
+skipStagesAfterUnstable：一旦构建状态变得UNSTABLE（不稳定）。跳过该阶段
+checkoutToSubdirectory：在工作空间子目录中自动地执行源代码检出操作；在工作区的子目录中执行自动源代码控制检出
+timeout：设置流水线运行的超时时间。在此之后，jenkins将中止流水线
+retry：在失败时，重新尝试整个流水线的指定次数
+timestamps： 预测所有流水线生成控制台输出，与该流水线出发的时间一致
+1.5.3 参数
+为流水线运行时设置项目相关的参数
+string 字符串类型的参数，例如
+parameters { string(name: 'DEPLOY_ENV', defaultValue: 'staging', description: '') }
+booleanParam 布尔值
+parameters { booleanParam(name: 'DEBUG_BUILD', defaultValue: true, description: '') }
+文件类型参数
+parameters { text(name: 'DEPLOY_TEXT', defaultValue: 'One\nTwo\nThree\n', description: '') }
+1.5.4触发器
+cron计划任务定期执行触发器
+triggers { cron('H */4 * * 1-5') }
+pollSCM 与cron定义类型，但是由jenkins 定期检测源码变化
+triggers { pollSCM('H */4 * * 1-5') }
+upstream 接受逗号分隔的工作字符串和阈值。当字符串中任何作业以最小阈值结束时，流水线被重新触发
+triggers { upstream(upstreamProjects: 'job1,job2', threshold: hudson.model.Result.SUCCESS) }
+1.5.5 tools
+获取自动安装或手动放置工具的环境变量，支持maven/jdk/gradle.工具的名称必须在系统设置->全局工具配置定义
+
+
+pipeline {
+    agent any
+    tools {
+        maven 'apache-maven-3.0.1'
+    }
+    stages {
+        stage('Example') {
+            steps {
+                sh 'mvn --version'
+            }
+        }
+    }
+}
+
+
+
+1.5.6 input
+input 用户执行阶段的时候，由人工确认是否继续
+message： 呈现给用户提示信息
+id： 可选默认为stage(名称)
+ok： 默认表单提交的ok 文本
+submitter： 可选。以逗号分隔的用户列表或允许提交的外部组名，默认允许任何用户
+submitterParameter： 环境变量的可选名称，如果存在，用submitter名称设置
+parameters： 提示提交者提供的一个可选参数列表
+pipeline {
+    agent any
+    stages {
+        stage('Example') {
+            input {
+                message "Should we continue?"
+                ok "Yes, we should."
+                submitter "alice,bob"//谁可以执行
+                parameters {
+                    string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+                }
+            }
+            steps {
+                echo "Hello, ${PERSON}, nice to meet you."
+            }
+        }
+    }
+}
+1.5.7 when
+when 指令允许流水线根据给定的条件决定是否应该执行阶段。when指令包含多个条件，所有的子条件必须返回True，阶段才能执行，这与子条件在allOf条件下嵌套的情况相同
+内置条件
+branch：当正在构建的分支与模式给定的分支匹配时，执行这个阶段，适用多分支流水线
+ when { branch 'master' }
+environment： 当指定环境变量是给定的值时，执行这个步骤
+when { environment name: 'DEPLOY_TO', value: 'production' }
+expression：当指定Groovy表达式为true时执行这个阶段
+when { expression { return params.DEBUG_BUILD } }.
+not:当嵌套条件错误时，执行这个阶段
+ when { not { branch 'master' } }
+allOf:当所有嵌套条件执行结果为真是，执行这个阶段，必须包含一个条件
+when { allOf { branch 'master'; environment name: 'DEPLOY_TO', value: 'production' } }
+anyOf：当至少有一嵌套条件为真时，执行这个阶段，必须包含至少一个条件
+when { anyOf { branch 'master'; branch 'staging' } }
+
+1.5.7 parallel 并行
+声明式流水线的阶段可以在他们内部声明多个嵌套阶段，他们将是并行执行。注意一个阶段必须只有一个steps或者parallel的阶段，嵌套阶段本身不能包含进一步parallel阶段。但其他的阶段行为与任何其他stage parallel的阶段不能包含agent 或 tools 阶段，因为他们没有steps
+另外，通过failFast true 到包含parallel 的 stage中，其中一个进程失败时，你可以强制所有的parallel阶段被终止
+
+pipeline {
+    agent any
+    stages {
+        stage('Non-Parallel Stage') {
+            steps {
+                echo 'This stage will be executed first.'
+            }
+        }
+        stage('Parallel Stage') {
+            when {
+                branch 'master'
+            }
+            failFast true
+            parallel {
+                stage('Branch A') {
+                    agent {
+                        label "for-branch-a"
+                    }
+                    steps {
+                        echo "On Branch A"
+                    }
+                }
+                stage('Branch B') {
+                    agent {
+                        label "for-branch-b"
+                    }
+                    steps {
+                        echo "On Branch B"
+                    }
+                }
+                stage('Branch C') {
+                    agent {
+                        label "for-branch-c"
+                    }
+                    stages {
+                        stage('Nested 1') {
+                            steps {
+                                echo "In stage Nested 1 within Branch C"
+                            }
+                        }
+                        stage('Nested 2') {
+                            steps {
+                                echo "In stage Nested 2 within Branch C"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+1.6 step
+161 script
+此script步骤会将Scripted Pipeline 块在声明流水线中执行，对于大多数用例来说，应该声明流水线中脚本步骤不是必要得，但它可以提供一个逃生出口。非平凡的模块和或复杂的script块应该被移到共享库
+pipeline {
+    agent any
+    stages {
+        stage('Example') {
+            steps {
+                echo 'Hello World'
+
+                script {
+                    def browsers = ['chrome', 'firefox']
+                    for (int i = 0; i < browsers.size(); ++i) {
+                        echo "Testing the ${browsers[i]} browser"
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+

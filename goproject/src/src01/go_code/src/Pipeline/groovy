@@ -1,0 +1,157 @@
+groovy 数据类型string
+
+字符串表示：单引号、双引号、三引号
+区别
+groovy:000> 'hello'
+===> hello
+groovy:000> name = "zhangsan"
+===> zhangsan
+groovy:000> "my name is ${name}"
+===> my name is zhangsan
+groovy:000> 'my name is ${name}'
+===> my name is ${name}
+
+
+常用方法： contains()是否包含特定内容返回true 或fasle
+groovy:000> "chenxi".contains("en")
+===> true
+groovy:000> "chenxi".contains("yu")
+===> false
+
+
+size() length() 字符串数量大小长度
+groovy:000> "chenxi".size()
+===> 6
+groovy:000> "chenxi".size()
+===> 6
+toString()转换string类型
+
+indexOf()元素索引
+endsWith()是否以指定字符串尾部
+groovy:000> "chenxi".endsWith("yu")
+===> false
+groovy:000> "chenxi".endsWith("xi")
+===> true
+minus() plus() 去掉、增加字符串
+reverse() 反向排序
+substring(1,2) 字符串的指定索引开始的子字符串
+toUpperCase() toLowerCase() 字符串大小转换
+groovy:000> "chenxi".toUpperCase()
+===> CHENXI
+groovy:000> "CHENXI".toLowerCase()
+===> chenxi
+
+split() 字符串分割 默认空格分割 返回列表
+groovy:000> "h,w,e,".split(',')
+===> [h, w, e]
+groovy:000> h1 = "h,w,e,"
+===> h,w,e,
+groovy:000> for(i in h1){
+groovy:001> println(i)
+groovy:002> }
+h
+,
+w
+,
+e
+,
+===> null
+
+
++ 加 -减
+groovy:000> "chenxi".size()
+===> 6
+
+数据类型list
+常用方法：
++ - += -= 元素增加减少
+groovy:000> [1,2,3,4]+5
+===> [1, 2, 3, 4, 5]
+
+<<  添加元素
+groovy:000> [1,2,3,4]<<9
+===> [1, 2, 3, 4, 9]
+isEmpty() 判断是否为空
+interface([2,3]) disjoint([1]) 集合交集、判断是否有交集
+flatten() 合并嵌套的列表
+unique()去重
+groovy:000> [2,3,4,5,5,6].unique()
+===> [2, 3, 4, 5, 6]
+
+reverse() sort() 反转升序
+count() 元素个数
+join()将元素按照参数连接
+groovy:000> [2,3,4,5,5,6].join("-")
+===> 2-3-4-5-5-6
+
+sum() min() max() 求和 最小值 最大值
+contain()包含特定元素
+remove(2) removeAll()
+each{}
+groovy:000> [2,3,4,5,5,6].each{
+groovy:001> println it}
+2
+3
+4
+5
+5
+6
+===> [2, 3, 4, 5, 5, 6]
+
+
+map
+表示：[:]
+常用方法：
+size() map大小
+['key'].key get() 获取value
+isEmpty() 是否为空
+containkey() 是否包含key
+containValue() 是否包含指定的value
+keySet() 生成key 列表
+each{} 遍历map
+remove('a') 删除元素(k-v)
+def 函数
+语法
+def PrintMes(value){
+	println(value)
+	return value
+}
+
+PrintMes("value")
+[root@jenkins ~]# groovy tset.groovy 
+cx
+[root@jenkins ~]# cat tset.groovy 
+def PrintMas(){
+     println("cx")
+}
+
+PrintMas()
+
+
+[root@jenkins ~]# cat tset.groovy 
+def PrintMas(){
+     println("cx")
+}
+
+PrintMas()
+[root@jenkins ~]# vim  tset.groovy 
+[root@jenkins ~]# vim  tset1.groovy 
+[root@jenkins ~]# cat tset1.groovy 
+def PrintMes(value){
+	println(value)
+	return value
+}
+
+PrintMes("value")
+[root@jenkins ~]# vim  tset3.groovy 
+[root@jenkins ~]# groovy tset3.groovy 
+value
+value
+[root@jenkins ~]# cat tset3.groovy 
+def PrintMes(value){
+	println(value)
+	return value
+}
+
+response = PrintMes("value")
+PrintMes(response)
