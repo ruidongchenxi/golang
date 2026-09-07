@@ -1,0 +1,27 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	"lnhgo/protobuf/day1/grpc/proto"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+)
+
+func main() {
+	conn, err := grpc.NewClient(
+    "127.0.0.1:8088",
+    grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+	if err != nil{
+		panic(err)
+	}
+	defer conn.Close()
+	c:=proto.NewGreeterClient(conn)
+	r,err:= c.SayHello(context.Background(),&proto.HelloRequest{Name: "bobby"})
+	if err!=nil{
+		panic(err)
+	}
+	fmt.Println(r.Message)
+}

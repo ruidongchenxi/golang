@@ -1,0 +1,14 @@
+syntax = "proto3";
+//option go_package = "common/stream/proto/v1";
+//option go_package = "../../../common/stream/proto/v1";//指定生成的文件存放的目录;以及包名
+service Greeter {
+    rpc GetStream (StreamReqDate) returns (stream StreamResData);//服务端流模式
+    rpc PostStream (stream  StreamReqDate) returns (StreamResData);//客户端流模式
+    rpc AllStream (stream  StreamReqDate) returns (stream StreamResData);//双向流模式
+}
+message StreamReqDate {
+    string data =1;
+}
+message StreamResData {
+    string data =1;
+}

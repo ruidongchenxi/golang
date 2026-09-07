@@ -1,0 +1,11 @@
+由于加密模块原先的go版本1.25.0不支持。后升级至1.27.1;修改原先GOROOT=D:/go 改为GOROOT=D:\go1.27.1\go;PYTH由D:\go\bin 更改为D:\go1.27.1\go\bin
+PS D:\golang\goproject\src\mxshop_srvs> go get github.com/anaskhan96/go-password-encoder 
+go: downloading golang.org/x/crypto v0.54.0
+go: upgraded go 1.25.0 => 1.26.5
+go: added github.com/anaskhan96/go-password-encoder v1.0.0
+go: added golang.org/x/crypto v0.54.0
+go: upgraded golang.org/x/text v0.20.0 => v0.40.0
+PS D:\golang\goproject\src\mxshop_srvs> go get gorm.io/gorm
+go: downloading golang.org/x/text v0.40.0
+PS D:\golang\goproject\src\mxshop_srvs> go get gorm.io/driver/mysql
+PS D:\golang\goproject\src\mxshop_srvs> go mod tidy                

@@ -1,0 +1,32 @@
+package main
+
+import (
+	"context"
+	"lnhgo/day05/grpc/proto"
+	"net"
+
+	"google.golang.org/grpc"
+)
+
+type Server struct{
+	proto.UnimplementedGreeterServer
+}
+
+func (s *Server) SayHello(c context.Context,request *proto.HelloRequest)(*proto.HelloReply,error){
+	return &proto.HelloReply{
+		Message: "hello "+request.Name,
+	},nil
+}
+//func (s *Server)mustEmbedUnimplementedGreeterServer(){}
+func main(){
+	g:=grpc.NewServer()
+	proto.RegisterGreeterServer(g,&Server{})
+	lis,err:=net.Listen("tcp","0.0.0.0:8080")
+	if err !=nil {
+		panic("监听失败")
+	}
+	err=g.Serve(lis)
+	if err !=nil {
+		panic("启动失败")
+	}
+}

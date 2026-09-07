@@ -1,0 +1,76 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+option go_package = ",;proto";
+service User {
+    rpc GetUserList(PageInfo) returns(UserListResPonse);//用户列表
+    rpc GetUserByMobile(MobileRequest) returns(UserInfoResPonse);//通过mobile查询用户
+    rpc GetUserByID(IdRequest) returns (UserInfoResPonse);//通过ID查用户
+    rpc CreateUser(CreateUserInfo) returns (UserInfoResPonse);//添加用户
+    rpc UpdateUser(UpdateUserInfo) returns (google.protobuf.Empty);//更新用户
+    rpc CheckPassWord(PasswordCheckInfo) returns (CheckReponse);//检查密码
+}
+message PasswordCheckInfo {
+    string password =1;
+    string encryptedPassword=2;
+
+}
+message CheckReponse {
+    bool success=1;
+}
+message PageInfo {
+    uint32 Pn = 1;
+    uint32 pSize =2;
+}
+message  MobileRequest{
+    string mobile=1;
+}
+message IdRequest {
+    int32 Id =1;
+}
+message CreateUserInfo {
+    string nickName =1;
+    string passWord =2;
+    string mobile =3;
+}
+message UpdateUserInfo {
+    int32 id = 1;
+    string nickName =2;
+    string gender = 3;
+    uint64 birthDay =4;
+}
+message UserInfoResPonse {
+    int32 id = 1;
+    string password = 2;
+    string mobile = 3;
+    uint64 birthDay = 5;
+    string gender = 6;
+    int32 role = 7;
+}
+message UserListResPonse {
+    int32 total=1;
+    repeated UserInfoResPonse data=2;
+
+}
+
+protoc-gen-go: invalid Go import path "," for "user.proto"
+
+The import path must contain at least one period ('.') or forward slash ('/') character.
+
+See https://protobuf.dev/reference/go/go-generated#package for more information.
+
+--go_out: protoc-gen-go: Plugin failed with status code 1.
+
+
+
+
+
+
+
+userserver 需要实现的方法
+	GetUserList(context.Context, *PageInfo) (*UserListResPonse, error)
+	GetUserByMobile(context.Context, *MobileRequest) (*UserInfoResPonse, error)
+	GetUserByID(context.Context, *IdRequest) (*UserInfoResPonse, error)
+	CreateUser(context.Context, *CreateUserInfo) (*UserInfoResPonse, error)
+	UpdateUser(context.Context, *UpdateUserInfo) (*emptypb.Empty, error)
+	CheckPassWord(context.Context, *PasswordCheckInfo) (*CheckReponse, error)
+	mustEmbedUnimplementedUserServer()
