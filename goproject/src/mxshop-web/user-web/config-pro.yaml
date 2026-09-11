@@ -1,0 +1,5 @@
+name: "user-web"
+prot : 8021
+user-srv: 
+  host: "127.0.0.1"
+  prot: 50051

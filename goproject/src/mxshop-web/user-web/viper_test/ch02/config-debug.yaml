@@ -1,0 +1,6 @@
+environment: debug
+ame: 'user-web'
+prot: 8021
+mysql:
+  host: '127.0.0.1'
+  prot: 3309
