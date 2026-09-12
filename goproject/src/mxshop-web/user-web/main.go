@@ -5,6 +5,11 @@ import (
 	"mxshop-web/user-web/global"
 	"mxshop-web/user-web/initialize"
 
+	myvalidator "mxshop-web/user-web/validator"
+
+	"github.com/gin-gonic/gin/binding"
+	ut "github.com/go-playground/universal-translator"
+	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 	//"google.golang.org/protobuf/proto"
 )
@@ -21,8 +26,17 @@ func main() {
 	if err:=initialize.InintTrans("zh");err!=nil{
 		panic(err)
 	}
+	//注册验证器
+	if v,ok:=binding.Validator.Engine().(*validator.Validate); ok{
+		v.RegisterValidation("mobile",myvalidator.ValidateMobile)
+		_=v.RegisterTranslation("mobile", global.Trans, func(ut ut.Translator) error {
+		return ut.Add("mobile", "{0} 非法手机号码!", true) // see universal-translator for details
+	}, func(ut ut.Translator, fe validator.FieldError) string {
+		t, _ := ut.T("mobile", fe.Field())
 
-
+		return t
+	})
+	}
 	// logger,_:=zap.NewDevelopment()
 	// defer logger.Sync()
 	// suger := logger.Sugar()

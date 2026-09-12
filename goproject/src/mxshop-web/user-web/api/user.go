@@ -62,7 +62,22 @@ func HandleGrpcErrorToHttp(err error,c *gin.Context){
 	}
 
 }
+func HandleValidatorError(c *gin.Context,err error){
+			errs,ok:=err.(validator.ValidationErrors)
+			if !ok {
+				c.JSON(http.StatusOK,gin.H{
+					"mgs":err.Error(),
+				})
+			}
+			c.JSON(http.StatusOK,gin.H{
+				"error":removeTopStruct(errs.Translate(global.Trans)),
+			})
+			fmt.Println(err.Error())
+			c.JSON(http.StatusBadRequest,gin.H{
+				"error":err.Error(),
+			})
 
+}
 func GetUserList(cxt *gin.Context){
 	// ip := "127.0.0.1"
 	// port:= 50051
@@ -108,19 +123,7 @@ func PassWordLogin(c *gin.Context){
 	//表单验证
 	PassWordLoginForm := forms.PassWordLoginForm{}
 	if err:=c.ShouldBind(&PassWordLoginForm );err!=nil{
-			errs,ok:=err.(validator.ValidationErrors)
-			if !ok {
-				c.JSON(http.StatusOK,gin.H{
-					"mgs":err.Error(),
-				})
-			}
-			c.JSON(http.StatusOK,gin.H{
-				"error":removeTopStruct(errs.Translate(global.Trans)),
-			})
-			fmt.Println(err.Error())
-			c.JSON(http.StatusBadRequest,gin.H{
-				"error":err.Error(),
-			})
+			HandleValidatorError(c,err)
 			return 
 		}
 }
