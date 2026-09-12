@@ -15,7 +15,7 @@ var conn *grpc.ClientConn
 func Init(){
 	var err error
 	conn, err = grpc.NewClient(
-    "127.0.0.1:50053",
+    "127.0.0.1:50051",
     grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err !=nil{
@@ -34,6 +34,7 @@ func TestGetUserList() {
 	if err != nil{
 		panic(err)
 	}
+	//fmt.Println(res.Data)
 	for _,user:=range res.Data{
 		fmt.Printf(user.Mobile,user.NickName,user.Password)
 		checkRes,err := userClient.CheckPassWord(context.Background(),&proto.PasswordCheckInfo{
@@ -63,7 +64,7 @@ func TestCreateUser(){
 }
 func main(){
 	Init()
-	//TestGetUserList()
-	TestCreateUser()
+	TestGetUserList()
+	//TestCreateUser()
 	defer conn.Close()
 }

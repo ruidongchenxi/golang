@@ -49,6 +49,7 @@ func MobileToResponse(User model.User) *proto.UserInfoResPonse{
 		NickName:User.NickName,
 		Gender: User.Gender,
 		Role: int32(User.Role),
+		Mobile: User.Mobile,
 	}
 	if User.Birthday!=nil{
 		userInfoRsp.BirthDay = uint64(User.Birthday.Unix())
