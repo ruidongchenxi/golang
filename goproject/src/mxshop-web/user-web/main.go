@@ -18,7 +18,9 @@ func main() {
 	//初始化路由
 	Router :=initialize.Routers()
 	//初始化翻译
-	_=initialize.InintTrans("zh")
+	if err:=initialize.InintTrans("zh");err!=nil{
+		panic(err)
+	}
 
 
 	// logger,_:=zap.NewDevelopment()
