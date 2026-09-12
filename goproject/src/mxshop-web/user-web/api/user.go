@@ -15,6 +15,7 @@ import (
 	//proto "mxshop-web/user-web/proter"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -106,8 +107,20 @@ func GetUserList(cxt *gin.Context){
 func PassWordLogin(c *gin.Context){
 	//表单验证
 	PassWordLoginForm := forms.PassWordLoginForm{}
-	if err := c.ShouldBindJSON(&PassWordLoginForm);err!=nil{
-		//如何返回错误信息
-		
-	}
+	if err:=c.ShouldBind(&PassWordLoginForm );err!=nil{
+			errs,ok:=err.(validator.ValidationErrors)
+			if !ok {
+				c.JSON(http.StatusOK,gin.H{
+					"mgs":err.Error(),
+				})
+			}
+			c.JSON(http.StatusOK,gin.H{
+				"error":removeTopStruct(errs.Translate(global.Trans)),
+			})
+			fmt.Println(err.Error())
+			c.JSON(http.StatusBadRequest,gin.H{
+				"error":err.Error(),
+			})
+			return 
+		}
 }
