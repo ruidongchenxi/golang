@@ -29,6 +29,7 @@ func main() {
 	//注册验证器
 	if v,ok:=binding.Validator.Engine().(*validator.Validate); ok{
 		v.RegisterValidation("mobile",myvalidator.ValidateMobile)
+		//翻译
 		_=v.RegisterTranslation("mobile", global.Trans, func(ut ut.Translator) error {
 		return ut.Add("mobile", "{0} 非法手机号码!", true) // see universal-translator for details
 	}, func(ut ut.Translator, fe validator.FieldError) string {
