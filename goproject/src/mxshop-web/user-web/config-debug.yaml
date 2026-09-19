@@ -3,3 +3,5 @@ prot : 8021
 user-srv: 
   host: '127.0.0.1'
   prot: 50051
+jwt:
+  key: 'S0PdLuetx4@^V9QJ4uJDdKv38ne67DqC'
