@@ -14,6 +14,7 @@ func InitUserRouter(Router *gin.RouterGroup) {
 	zap.S().Info("配置用户相关url")
 	{
 	UserRouter.GET("list",middlewares.JWTAuth(),middlewares.IsAdminAuth(),api.GetUserList)//某个url 访问的限制
+	//UserRouter.GET("list",api.GetUserList)
 	UserRouter.POST("pwd_login",api.PassWordLogin)
 	}
 }
