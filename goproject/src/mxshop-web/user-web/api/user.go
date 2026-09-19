@@ -137,6 +137,13 @@ func PassWordLogin(c *gin.Context){
 			HandleValidatorError(c,err)
 			return 
 	}
+	//验证验证码是否正确
+	if store.Verify(PassWordLoginForm.CaptchaID,PassWordLoginForm.Captcha,true)!=true{
+		c.JSON(http.StatusBadRequest,gin.H{
+			"captcha":"验证码错误",
+		})
+
+	}
 	//拨号连接
 	userConn,err :=grpc.NewClient(
 		fmt.Sprintf("%s:%d",global.ServerConfig.UserSrvInfo.Host,global.ServerConfig.UserSrvInfo.Prot),

@@ -12,5 +12,6 @@ func Routers() *gin.Engine{
 	Router.Use(middlewares.Cors())//配置跨域
 	ApiGroup := Router.Group("/u/v1")
 	router2.InitUserRouter(ApiGroup)
+	router2.InitBaseRouter(ApiGroup)//引入验证码路由
 	return  Router
 }
