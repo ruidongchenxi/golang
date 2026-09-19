@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+
 	//"go/token"
 	"mxshop-web/user-web/forms"
 	"mxshop-web/user-web/global"
@@ -95,6 +96,10 @@ func GetUserList(cxt *gin.Context){
 	if err!=nil{
 		zap.S().Errorw("连接用户服务失败","msg",err.Error(),)
 	}
+	//
+	claims,_:=cxt.Get("claims")
+	currentUser:=claims.(*models.CustomClaims)
+	zap.S().Infof("访问用户：%d",currentUser.ID)
 	//生成grpc 的client并调用接口
 	userSrvClient:=proto.NewUserClient(userConn)
 	pn:= cxt.DefaultQuery("pn","0")//设置默认值
