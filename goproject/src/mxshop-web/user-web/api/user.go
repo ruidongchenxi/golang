@@ -96,7 +96,7 @@ func GetUserList(cxt *gin.Context){
 	if err!=nil{
 		zap.S().Errorw("连接用户服务失败","msg",err.Error(),)
 	}
-	//
+	//给url 加登录权限验证日志
 	claims,_:=cxt.Get("claims")
 	currentUser:=claims.(*models.CustomClaims)
 	zap.S().Infof("访问用户：%d",currentUser.ID)
